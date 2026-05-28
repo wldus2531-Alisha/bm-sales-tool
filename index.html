@@ -710,10 +710,9 @@ function _showList(places) {
   if (places.length === 1) { _pinPlace(places[0]); list.innerHTML = ''; return; }
   list.innerHTML = places.slice(0, 5).map(function(p, i) {
     const cat = p.category_name ? p.category_name.split(' > ').pop() : '';
-    return '<div class="map-place-item" onclick="_pinPlace(window._mapPlaces[' + i + ']);document.getElementById('mapPlacesList').innerHTML=''">'
-      + '<div><span class="map-place-name">' + p.place_name + '</span>'
-      + (cat ? '<span class="map-place-cat">' + cat + '</span>' : '')
-      + '</div><div class="map-place-addr">' + p.address_name + '</div></div>';
+    return `<div class="map-place-item" onclick="_pinPlace(window._mapPlaces[${i}]);document.getElementById('mapPlacesList').innerHTML=''">
+      <div><span class="map-place-name">${p.place_name}</span>${cat ? `<span class="map-place-cat">${cat}</span>` : ''}</div>
+      <div class="map-place-addr">${p.address_name}</div></div>`;
   }).join('');
 }
 
