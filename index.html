@@ -679,7 +679,7 @@ function refreshAnalyzeBtn() {
 // ══════════════════════════════════════════════════
 function _loadKakao(cb) {
   if (window.kakao && window.kakao.maps && window.kakao.maps.services) { cb(); return; }
-  if (!KAKAO_API_KEY || KAKAO_API_KEY === '929b94e10110f41be6823dd4a6fe9e74') {
+  if (!KAKAO_API_KEY || KAKAO_API_KEY === '__KAKAO_API_KEY__') {
     document.getElementById('mapApiNotice').style.display = 'block';
     return;
   }
