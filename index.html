@@ -604,6 +604,12 @@ const ORDER_TIMES = [
   { label: '20:00 ~ 21:00', tag: '야간 초입' },
   { label: '13:00 ~ 14:00', tag: '점심 후반' }
 ];
+const TIME_PCTS = [100, 88, 72, 58, 45];
+const ORDER_DAYS = [
+  { day: '금요일', medal: '🥇', pct: 100 },
+  { day: '토요일', medal: '🥈', pct: 92 },
+  { day: '일요일', medal: '🥉', pct: 85 }
+];
 
 
 const CATEGORIES = [
@@ -1291,6 +1297,15 @@ function renderExpectedResults(r1, r2, cat) {
   `;
 }
 
+// ══════════════════════════════════════════════════
+// PASSWORD CHECK (DOMContentLoaded)
+// ══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  const stored = sessionStorage.getItem('hvc_auth');
+  if (stored === getTodayPw()) {
+    document.getElementById('pw-screen').style.display = 'none';
+  }
+});
 </script>
 </body>
 </html>
