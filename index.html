@@ -1,662 +1,309 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HV 상담 지원 TOOL | 배민 파트너</title>
-  <style>
-    :root {
-      --teal: #2AC1BC;
-      --teal-dark: #1A9E9A;
-      --teal-light: #E8F9F8;
-      --orange: #FF6B35;
-      --orange-light: #FFF0EB;
-      --purple: #6B35CC;
-      --purple-light: #F0EBFF;
-      --yellow-bg: #FFF8E1;
-      --yellow-text: #856404;
-      --red-bg: #B71C1C;
-      --gray-50: #F8F9FA;
-      --gray-100: #F1F3F5;
-      --gray-200: #E9ECEF;
-      --gray-300: #DEE2E6;
-      --gray-400: #CED4DA;
-      --gray-500: #ADB5BD;
-      --gray-600: #868E96;
-      --gray-700: #495057;
-      --gray-900: #212529;
-      --shadow-sm: 0 1px 6px rgba(0,0,0,0.06);
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
-      --shadow-lg: 0 8px 28px rgba(0,0,0,0.13);
-      --radius: 16px;
-      --radius-sm: 10px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>파트너 상권 분석 TOOL | 배민 영업 담당자 전용</title>
+<style>
+:root {
+  --teal: #2AC1BC; --teal-dark: #1A9E9A; --teal-light: #E8F9F8;
+  --orange: #FF6B35; --orange-light: #FFF0EB;
+  --purple: #6B35CC; --purple-light: #F0EBFF;
+  --yellow-bg: #FFF8E1; --yellow-text: #856404;
+  --red-bg: #B71C1C;
+  --gray-50: #F8F9FA; --gray-100: #F1F3F5; --gray-200: #E9ECEF;
+  --gray-300: #DEE2E6; --gray-400: #CED4DA; --gray-500: #ADB5BD;
+  --gray-600: #868E96; --gray-700: #495057; --gray-900: #212529;
+  --shadow-sm: 0 1px 6px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 28px rgba(0,0,0,0.13);
+  --radius: 16px; --radius-sm: 10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+  background: var(--gray-100); color: var(--gray-900); min-height: 100vh; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── PASSWORD ── */
+#pw-screen { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:flex;
+  align-items:center; justify-content:center; z-index:9999; backdrop-filter:blur(6px); }
+.pw-box { background:#fff; border-radius:20px; padding:40px 36px; width:340px;
+  text-align:center; box-shadow:var(--shadow-lg); }
+.pw-logo { font-size:32px; margin-bottom:8px; }
+.pw-title { font-size:20px; font-weight:800; color:var(--gray-900); margin-bottom:4px; }
+.pw-sub { font-size:13px; color:var(--gray-500); margin-bottom:24px; }
+.pw-input-wrap { position:relative; margin-bottom:12px; }
+.pw-input-wrap input { width:100%; padding:13px 44px 13px 16px; border:1.5px solid var(--gray-200);
+  border-radius:10px; font-size:16px; outline:none; letter-spacing:4px; transition:border 0.2s; }
+.pw-input-wrap input:focus { border-color:var(--teal); }
+.pw-input-wrap input.error { border-color:#e53e3e; animation:shake 0.3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.pw-eye { position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  background:none; border:none; cursor:pointer; font-size:18px; color:var(--gray-500); }
+.pw-error { font-size:12px; color:#e53e3e; margin-bottom:10px; display:none; }
+.pw-error.show { display:block; }
+.pw-btn { width:100%; padding:13px; background:var(--teal); color:#fff; border:none;
+  border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; transition:background 0.2s; }
+.pw-btn:hover { background:var(--teal-dark); }
+.pw-footer-note { font-size:11px; color:var(--gray-400); margin-top:16px; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-      background: var(--gray-50);
-      color: var(--gray-900);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+/* ── STICKY HEADER ── */
+.sticky-header { position:sticky; top:0; z-index:100; }
+.top-notice { background:var(--red-bg); color:#fff; font-size:12px; font-weight:600;
+  text-align:center; padding:8px 16px; display:flex; align-items:center; justify-content:center; gap:6px; }
+.header-bar { background:#fff; border-bottom:1px solid var(--gray-200); padding:0 16px;
+  box-shadow:var(--shadow-sm); }
+.header-inner { max-width:960px; margin:0 auto; display:flex; align-items:center;
+  justify-content:space-between; padding:10px 0; }
+.logo { font-size:15px; font-weight:800; color:var(--teal-dark); }
+.tagline { font-size:11px; color:var(--gray-500); margin-top:2px; }
+.header-badge { background:var(--teal-light); color:var(--teal-dark); font-size:11px;
+  font-weight:700; padding:4px 10px; border-radius:20px; }
 
-    /* ── STICKY HEADER WRAPPER ── */
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-    }
+/* ── LAYOUT ── */
+.container { max-width:960px; margin:0 auto; padding:20px 16px 40px; }
 
-    /* ── TOP NOTICE BAR ── */
-    .top-notice {
-      background: var(--red-bg);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 8px 20px;
-      text-align: center;
-      line-height: 1.5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      letter-spacing: 0.1px;
-    }
-    .top-notice .tn-icon { font-size: 14px; flex-shrink: 0; }
+/* ── FADE TRANSITIONS ── */
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-8px)} }
+.fade-in { animation:fadeIn 0.35s ease both; }
+.fade-out { animation:fadeOut 0.25s ease both; }
 
-    /* ── HEADER BAR ── */
-    .header-bar {
-      background: var(--teal);
-      padding: 13px 20px 15px;
-      box-shadow: 0 3px 12px rgba(42,193,188,0.35);
-    }
-    .header-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo-area .logo { font-size: 17px; font-weight: 900; color: #fff; letter-spacing: -0.4px; line-height: 1.3; }
-    .logo-area .tagline { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 2px; }
-    .header-badge {
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+/* ── SETUP SCREEN ── */
+#screen-setup { }
+.setup-hero { text-align:center; padding:24px 0 20px; }
+.setup-hero h1 { font-size:22px; font-weight:800; color:var(--gray-900); margin-bottom:6px; }
+.setup-hero p { font-size:14px; color:var(--gray-600); line-height:1.6; }
+.setup-steps { display:flex; gap:8px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+.setup-step { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--gray-600);
+  background:#fff; padding:6px 12px; border-radius:20px; box-shadow:var(--shadow-sm); }
+.setup-step-num { width:20px; height:20px; background:var(--teal); color:#fff; border-radius:50%;
+  font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+.setup-card { background:#fff; border-radius:var(--radius); padding:24px;
+  box-shadow:var(--shadow-md); margin-bottom:16px; }
+.setup-card-title { font-size:14px; font-weight:800; color:var(--gray-700);
+  margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.setup-card-title span { background:var(--teal); color:#fff; width:24px; height:24px;
+  border-radius:50%; font-size:12px; display:inline-flex; align-items:center; justify-content:center; }
+/* Map search */
+.map-search-wrap { display:flex; gap:8px; margin-bottom:10px; }
+.map-search-inp { flex:1; padding:11px 14px; border:1.5px solid var(--gray-200);
+  border-radius:var(--radius-sm); font-size:14px; outline:none; transition:border 0.2s; }
+.map-search-inp:focus { border-color:var(--teal); }
+.map-search-btn { padding:11px 18px; background:var(--teal); color:#fff; border:none;
+  border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer;
+  transition:background 0.2s; white-space:nowrap; }
+.map-search-btn:hover { background:var(--teal-dark); }
+.map-places-list { margin-bottom:10px; }
+.map-place-item { padding:10px 14px; border:1.5px solid var(--gray-200); border-radius:8px;
+  margin-bottom:6px; cursor:pointer; transition:all 0.18s; background:#fff; }
+.map-place-item:hover { border-color:var(--teal); background:var(--teal-light); }
+.map-place-name { font-size:14px; font-weight:700; color:var(--gray-900); }
+.map-place-cat { font-size:11px; color:var(--teal-dark); margin-left:6px; font-weight:600; }
+.map-place-addr { font-size:12px; color:var(--gray-500); margin-top:2px; }
+#setupMap { width:100%; height:300px; border-radius:12px; border:1.5px solid var(--gray-200); overflow:hidden; }
+.map-ph { width:100%; height:300px; border-radius:12px; border:2px dashed var(--gray-200);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:var(--gray-400); font-size:14px; gap:10px; background:var(--teal-light); }
+.radius-bar { display:none; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap;
+  padding:10px 14px; background:var(--teal-light); border-radius:8px; }
+.radius-lbl { font-size:13px; font-weight:700; color:var(--gray-700); margin-right:4px; }
+.r-btn { padding:7px 16px; border:1.5px solid var(--gray-300); border-radius:20px;
+  background:#fff; font-size:13px; font-weight:700; color:var(--gray-600); cursor:pointer; transition:all 0.18s; }
+.r-btn.active { background:var(--teal); border-color:var(--teal); color:#fff;
+  box-shadow:0 2px 8px rgba(42,193,188,0.3); }
+.r-btn:hover:not(.active) { border-color:var(--teal); color:var(--teal); }
+/* Region detected */
+.detected-region { display:none; margin-top:10px; padding:10px 14px;
+  background:var(--teal-light); border-radius:8px; border:1px solid rgba(42,193,188,0.3);
+  font-size:13px; color:var(--teal-dark); font-weight:600; }
+/* Category chips */
+.cat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; }
+.cat-chip { padding:10px 8px; border:1.5px solid var(--gray-200); border-radius:var(--radius-sm);
+  background:#fff; font-size:13px; font-weight:600; color:var(--gray-600); cursor:pointer;
+  transition:all 0.18s; text-align:center; }
+.cat-chip:hover { border-color:var(--teal); color:var(--teal); }
+.cat-chip.active { background:var(--teal); border-color:var(--teal); color:#fff; }
+/* API notice */
+.api-notice { background:#FFF3CD; border:1px solid #FFECB5; border-radius:8px;
+  padding:10px 14px; margin-bottom:12px; font-size:12px; color:#856404; line-height:1.7; }
+.api-notice a { color:#856404; font-weight:700; }
+.api-notice code { background:rgba(0,0,0,0.07); padding:1px 5px; border-radius:3px;
+  font-family:monospace; font-size:11px; }
+/* Analyze button */
+.analyze-btn-wrap { text-align:center; margin-top:8px; }
+.analyze-btn { padding:16px 48px; background:var(--teal); color:#fff; border:none;
+  border-radius:var(--radius-sm); font-size:17px; font-weight:800; cursor:pointer;
+  transition:all 0.2s; box-shadow:0 4px 16px rgba(42,193,188,0.35); letter-spacing:0.5px; }
+.analyze-btn:hover { background:var(--teal-dark); box-shadow:0 6px 20px rgba(42,193,188,0.45); transform:translateY(-1px); }
+.analyze-btn:disabled { background:var(--gray-300); box-shadow:none; cursor:not-allowed; transform:none; }
 
-    /* ── CONTAINER ── */
-    .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
+/* ── RESULTS SCREEN ── */
+#screen-results { display:none; }
+.result-header { background:#fff; border-radius:var(--radius); padding:16px 20px;
+  box-shadow:var(--shadow-md); margin-bottom:16px; display:flex;
+  align-items:flex-start; gap:16px; flex-wrap:wrap; }
+.result-summary { flex:1; min-width:200px; }
+.result-partner { font-size:16px; font-weight:800; color:var(--gray-900); margin-bottom:4px; }
+.result-meta { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.result-tag { background:var(--teal-light); color:var(--teal-dark); font-size:12px;
+  font-weight:700; padding:3px 10px; border-radius:20px; }
+.result-addr { font-size:12px; color:var(--gray-500); }
+.back-btn { padding:8px 16px; border:1.5px solid var(--gray-300); background:#fff;
+  border-radius:var(--radius-sm); font-size:13px; font-weight:700; color:var(--gray-600);
+  cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+.back-btn:hover { border-color:var(--teal); color:var(--teal); }
+.result-map-wrap { width:220px; flex-shrink:0; }
+#resultMap { width:100%; height:130px; border-radius:10px; border:1.5px solid var(--gray-200); overflow:hidden; }
+.result-radius-bar { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+.r-btn-sm { padding:4px 10px; border:1.5px solid var(--gray-300); border-radius:20px;
+  background:#fff; font-size:11px; font-weight:700; color:var(--gray-600); cursor:pointer; transition:all 0.18s; }
+.r-btn-sm.active { background:var(--teal); border-color:var(--teal); color:#fff; }
+.r-btn-sm:hover:not(.active) { border-color:var(--teal); color:var(--teal); }
 
-    /* ── FILTER CARD ── */
-    .filter-card {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .step-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-    .step-badge {
-      background: var(--teal);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: 0.5px;
-    }
-    .step-title { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+/* ── TABS ── */
+.tab-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px;
+  background:#fff; border-radius:var(--radius); padding:10px;
+  box-shadow:var(--shadow-sm); }
+.tab-btn { flex:1; min-width:100px; padding:10px 8px; border:1.5px solid var(--gray-200);
+  border-radius:var(--radius-sm); background:#fff; font-size:12px; font-weight:700;
+  color:var(--gray-600); cursor:pointer; transition:all 0.18s; text-align:center; line-height:1.4; }
+.tab-btn.active { background:var(--teal); border-color:var(--teal); color:#fff;
+  box-shadow:0 2px 8px rgba(42,193,188,0.3); }
+.tab-btn:hover:not(.active) { border-color:var(--teal); color:var(--teal); }
+.tab-num { display:block; font-size:10px; opacity:0.8; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
 
-    .region-row { display: flex; gap: 12px; }
-    @media (max-width: 520px) { .region-row { flex-direction: column; } }
+/* ── SECTION / CARD BASE ── */
+.section-block { background:#fff; border-radius:var(--radius); padding:20px;
+  box-shadow:var(--shadow-sm); margin-bottom:16px; }
+.section-head { display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px; flex-wrap:wrap; gap:8px; }
+.section-ttl { font-size:17px; font-weight:800; color:var(--gray-900); display:flex; align-items:center; gap:6px; }
+.badge-sample { background:#FFF3CD; color:#856404; font-size:11px; font-weight:700;
+  padding:3px 8px; border-radius:20px; }
+.notice { background:var(--yellow-bg); border-radius:var(--radius-sm); padding:12px 16px;
+  font-size:13px; color:var(--yellow-text); display:flex; align-items:flex-start;
+  gap:8px; margin-bottom:16px; line-height:1.6; }
 
-    .select-wrap { flex: 1; }
-    .select-label { font-size: 12px; font-weight: 600; color: var(--gray-600); display: block; margin-bottom: 6px; }
-    .select-outer { position: relative; }
-    select {
-      width: 100%;
-      padding: 12px 38px 12px 14px;
-      border: 1.5px solid var(--gray-200);
-      border-radius: var(--radius-sm);
-      background: #fff;
-      font-size: 14px;
-      color: var(--gray-900);
-      appearance: none;
-      cursor: pointer;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    select:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,193,188,0.15); }
-    select:disabled { background: var(--gray-100); color: var(--gray-500); cursor: not-allowed; }
-    .select-outer::after {
-      content: '▾';
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 13px;
-      color: var(--gray-500);
-      pointer-events: none;
-    }
+/* ── STAT CARDS ── */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:16px; }
+.stat-card { background:var(--gray-50); border-radius:var(--radius-sm); padding:14px 16px;
+  border:1px solid var(--gray-200); }
+.stat-card.accent { background:linear-gradient(135deg,var(--teal-light),#fff);
+  border-color:rgba(42,193,188,0.3); }
+.stat-card.accent-blue { background:linear-gradient(135deg,#EBF8FF,#fff);
+  border-color:rgba(66,153,225,0.3); }
+.stat-card.accent-red { background:linear-gradient(135deg,#FFF5F5,#fff);
+  border-color:rgba(229,62,62,0.25); }
+.stat-lbl { font-size:11px; color:var(--gray-600); font-weight:600; line-height:1.4; margin-bottom:6px; }
+.stat-val { font-size:24px; font-weight:800; color:var(--gray-900); line-height:1.1; }
+.stat-val span { font-size:13px; font-weight:600; color:var(--gray-600); margin-left:2px; }
+.stat-hint { font-size:11px; color:var(--gray-500); margin-top:4px; }
 
-    .divider { height: 1px; background: var(--gray-100); margin: 20px 0; }
+/* ── INSIGHT CARD ── */
+.insight-card { background:var(--gray-50); border-radius:var(--radius-sm);
+  padding:16px; border:1px solid var(--gray-200); margin-bottom:16px; }
+.insight-inner { display:flex; gap:0; flex-wrap:wrap; }
+.insight-item { flex:1; min-width:130px; padding:0 16px; text-align:center;
+  border-right:1px solid var(--gray-200); }
+.insight-item:last-of-type { border-right:none; }
+.ii-label { font-size:11px; color:var(--gray-600); font-weight:600; margin-bottom:6px; line-height:1.4; }
+.ii-value { font-size:22px; font-weight:800; color:var(--teal-dark); }
+.ii-value span { font-size:12px; font-weight:600; color:var(--gray-600); }
+.ii-sub { font-size:11px; color:var(--gray-500); margin-top:2px; }
+.insight-tip { margin-top:14px; padding:14px 16px; background:var(--teal-light);
+  border-radius:var(--radius-sm); border-left:4px solid var(--teal); font-size:13px; line-height:1.7; }
+.insight-tip.blue-tip { background:#EBF8FF; border-color:#4299E1; }
+.tip-ttl { font-weight:800; font-size:13px; margin-bottom:6px; color:var(--teal-dark); }
+.tip-ttl.blue { color:#2B6CB0; }
+.tip-body { color:var(--gray-700); }
 
-    /* Category chips */
-    .category-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-    .cat-chip {
-      padding: 7px 13px;
-      border-radius: 24px;
-      border: 1.5px solid var(--gray-200);
-      background: #fff;
-      font-size: 13px;
-      color: var(--gray-700);
-      cursor: pointer;
-      transition: all 0.18s;
-      user-select: none;
-      white-space: nowrap;
-    }
-    .cat-chip:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
-    .cat-chip.selected { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 700; }
+/* ── MISSED CUSTOMERS (③) ── */
+.miss-hero { text-align:center; padding:24px 16px; margin-bottom:16px;
+  background:linear-gradient(135deg,#FFF5F5,#FFF0EB); border-radius:var(--radius-sm);
+  border:1px solid rgba(229,62,62,0.15); }
+.miss-hero-num { font-size:42px; font-weight:900; color:#C53030; line-height:1.1; }
+.miss-hero-unit { font-size:16px; font-weight:700; color:#C53030; }
+.miss-hero-label { font-size:14px; color:var(--gray-600); margin-top:6px; font-weight:600; }
+.miss-hero-sub { font-size:12px; color:var(--gray-500); margin-top:4px; }
+.miss-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-bottom:16px; }
+.miss-card { background:#fff; border-radius:var(--radius-sm); padding:14px 16px;
+  border:1.5px solid rgba(229,62,62,0.2); text-align:center; }
+.miss-card-val { font-size:22px; font-weight:800; color:#C53030; }
+.miss-card-val span { font-size:12px; color:var(--gray-600); font-weight:600; }
+.miss-card-lbl { font-size:11px; color:var(--gray-600); margin-top:4px; font-weight:600; line-height:1.4; }
+.miss-bar { background:#FFF5F5; border-radius:var(--radius-sm); padding:16px;
+  border:1px solid rgba(229,62,62,0.2); }
+.miss-bar-title { font-size:13px; font-weight:800; color:#C53030; margin-bottom:12px; }
+.miss-compare { display:grid; grid-template-columns:1fr 40px 1fr; gap:8px; align-items:center; text-align:center; }
+.miss-col { background:#fff; border-radius:8px; padding:12px; }
+.miss-col.before { border:1.5px solid rgba(229,62,62,0.3); }
+.miss-col.after { border:1.5px solid rgba(42,193,188,0.4); background:var(--teal-light); }
+.miss-col-ttl { font-size:11px; font-weight:700; color:var(--gray-600); margin-bottom:6px; }
+.miss-col-val { font-size:20px; font-weight:800; }
+.miss-col.before .miss-col-val { color:#C53030; }
+.miss-col.after .miss-col-val { color:var(--teal-dark); }
+.miss-col-sub { font-size:11px; color:var(--gray-500); margin-top:3px; }
+.miss-arrow { font-size:24px; color:var(--gray-400); }
 
-    /* CTA Button */
-    .cta-btn {
-      width: 100%;
-      padding: 15px;
-      background: var(--teal);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-      letter-spacing: -0.2px;
-    }
-    .cta-btn:hover:not(:disabled) { background: var(--teal-dark); box-shadow: 0 4px 14px rgba(42,193,188,0.4); }
-    .cta-btn:active:not(:disabled) { transform: scale(0.99); }
-    .cta-btn:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+/* ── EXPECTED (⑤) ── */
+.expect-hero { text-align:center; padding:20px 16px;
+  background:linear-gradient(135deg,var(--teal-light),#fff);
+  border-radius:var(--radius-sm); margin-bottom:16px;
+  border:1px solid rgba(42,193,188,0.3); }
+.expect-hero-label { font-size:13px; color:var(--teal-dark); font-weight:700; margin-bottom:8px; }
+.expect-hero-num { font-size:40px; font-weight:900; color:var(--teal-dark); }
+.expect-hero-unit { font-size:15px; font-weight:700; color:var(--teal-dark); }
+.expect-hero-sub { font-size:12px; color:var(--gray-600); margin-top:6px; }
+.calc-link-btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px;
+  background:var(--teal); color:#fff; border-radius:var(--radius-sm); font-size:14px;
+  font-weight:700; text-decoration:none; transition:background 0.2s;
+  box-shadow:0 2px 8px rgba(42,193,188,0.3); margin-top:12px; }
+.calc-link-btn:hover { background:var(--teal-dark); }
 
-    /* ── RESULTS ── */
-    .results { display: none; }
-    .results.visible { display: block; }
+/* ── RANK CARDS ── */
+.rank-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-top:16px; }
+.rank-card { background:var(--gray-50); border-radius:var(--radius-sm);
+  padding:16px; border:1px solid var(--gray-200); }
+.rank-card-ttl { font-size:13px; font-weight:800; color:var(--gray-700); margin-bottom:12px; }
+.rank-row { display:flex; align-items:center; gap:8px; padding:5px 0;
+  border-bottom:1px solid var(--gray-200); }
+.rank-row:last-child { border-bottom:none; }
+.rank-num { font-size:12px; font-weight:800; color:var(--gray-400); width:18px; text-align:center; }
+.rank-bar-wrap { flex:1; }
+.rank-bar-bg { background:var(--gray-200); border-radius:4px; height:6px; overflow:hidden; }
+.rank-bar-fill { background:var(--teal); height:100%; border-radius:4px; transition:width 0.6s ease; }
+.rank-label { font-size:12px; font-weight:600; color:var(--gray-700); white-space:nowrap; }
+.rank-pct { font-size:11px; color:var(--gray-500); width:32px; text-align:right; }
 
-    /* Selection pill bar */
-    .selection-bar {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      background: var(--teal-light);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      margin-bottom: 28px;
-      border: 1px solid rgba(42,193,188,0.2);
-    }
-    .sel-icon { font-size: 16px; }
-    .sel-pill {
-      background: var(--teal);
-      color: #fff;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .sel-sep { color: var(--teal-dark); font-size: 14px; font-weight: 300; }
-    .sel-reset {
-      margin-left: auto;
-      font-size: 12px;
-      color: var(--teal-dark);
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: underline;
-    }
+/* ── CASES ── */
+.case-card { background:#fff; border-radius:var(--radius-sm); padding:16px;
+  border:1px solid var(--gray-200); margin-bottom:12px; }
+.case-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.case-icon { width:40px; height:40px; background:var(--teal-light); border-radius:10px;
+  display:flex; align-items:center; justify-content:center; font-size:20px; }
+.case-name { font-size:15px; font-weight:800; color:var(--gray-900); }
+.case-meta { font-size:12px; color:var(--gray-500); margin-top:1px; }
+.metrics-row { display:flex; gap:8px; flex-wrap:wrap; }
+.m-chip { background:var(--gray-50); border:1px solid var(--gray-200); border-radius:8px;
+  padding:8px 12px; flex:1; min-width:100px; }
+.m-lbl { font-size:11px; color:var(--gray-600); font-weight:600; }
+.m-val { font-size:15px; font-weight:800; color:var(--teal-dark); margin-top:2px; }
 
-    /* Section wrapper */
-    .section-block { margin-bottom: 36px; }
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .section-ttl { font-size: 17px; font-weight: 800; color: var(--gray-900); display: flex; align-items: center; gap: 6px; }
-    .badge-sample {
-      background: var(--yellow-bg);
-      color: var(--yellow-text);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
-    }
+/* ── FOOTER ── */
+.footer { text-align:center; font-size:12px; color:var(--gray-400);
+  padding:24px 16px; border-top:1px solid var(--gray-200); margin-top:8px; }
 
-    /* Notice bar */
-    .notice {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      background: var(--yellow-bg);
-      border: 1px solid #FFECB5;
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 12px;
-      color: var(--yellow-text);
-      margin-bottom: 14px;
-      line-height: 1.5;
-    }
-
-    /* ── PROMO CARDS ── */
-    .promo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
-    }
-    .promo-card {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 20px;
-      border-top: 3px solid var(--teal);
-      transition: transform 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .promo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-    .promo-card.orange-top { border-top-color: var(--orange); }
-    .promo-card.purple-top { border-top-color: var(--purple); }
-    .promo-card.wide-span { grid-column: span 2; }
-    @media (max-width: 580px) { .promo-card.wide-span { grid-column: span 1; } }
-
-    .promo-type-tag {
-      display: inline-flex;
-      align-items: center;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 6px;
-      width: fit-content;
-    }
-    .tag-teal { background: var(--teal-light); color: var(--teal-dark); }
-    .tag-orange { background: var(--orange-light); color: #C44A1E; }
-    .tag-purple { background: var(--purple-light); color: var(--purple); }
-
-    .promo-name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
-    .promo-desc { font-size: 13px; color: var(--gray-600); line-height: 1.55; flex: 1; }
-    .promo-benefit-box {
-      background: var(--gray-50);
-      border-radius: 8px;
-      padding: 10px 12px;
-    }
-    .pb-label { font-size: 11px; font-weight: 600; color: var(--gray-500); margin-bottom: 3px; }
-    .pb-value { font-size: 14px; font-weight: 700; color: var(--gray-900); }
-    .promo-tags-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-    .p-tag {
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      background: var(--gray-100);
-      color: var(--gray-600);
-    }
-
-    /* ── STATS CARDS ── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .stat-card {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 18px 16px;
-      text-align: center;
-    }
-    .stat-card.accent {
-      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
-    }
-    .stat-card.accent-blue {
-      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-    }
-    .stat-lbl { font-size: 12px; color: var(--gray-600); line-height: 1.4; margin-bottom: 6px; }
-    .stat-card.accent .stat-lbl,
-    .stat-card.accent-blue .stat-lbl { color: rgba(255,255,255,0.82); }
-    .stat-val { font-size: 26px; font-weight: 900; color: var(--gray-900); letter-spacing: -1px; }
-    .stat-val span { font-size: 14px; font-weight: 600; letter-spacing: 0; }
-    .stat-card.accent .stat-val,
-    .stat-card.accent-blue .stat-val { color: #fff; }
-    .stat-hint { font-size: 11px; color: var(--gray-500); margin-top: 3px; }
-    .stat-card.accent .stat-hint,
-    .stat-card.accent-blue .stat-hint { color: rgba(255,255,255,0.65); }
-
-    .insight-card {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 20px;
-    }
-    .insight-inner {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: stretch;
-    }
-    .insight-item { flex: 1; min-width: 140px; }
-    .ii-label { font-size: 12px; color: var(--gray-600); margin-bottom: 4px; }
-    .ii-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .ii-value span { font-size: 13px; font-weight: 500; }
-    .ii-sub { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
-    .insight-tip {
-      background: var(--teal-light);
-      border-radius: var(--radius-sm);
-      padding: 14px 16px;
-      flex: 2;
-      min-width: 220px;
-    }
-    .insight-tip.blue-tip { background: #EFF6FF; }
-    .tip-ttl { font-size: 12px; font-weight: 700; color: var(--teal-dark); margin-bottom: 6px; }
-    .tip-ttl.blue { color: #1D4ED8; }
-    .tip-body { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
-
-    /* ── RANK CARDS ── */
-    .rank-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-    @media (max-width: 680px) {
-      .rank-grid { grid-template-columns: 1fr; }
-    }
-    .rank-card {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 20px;
-    }
-    .rank-card-ttl {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--gray-700);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .rank-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 9px;
-    }
-    .rank-item:last-child { margin-bottom: 0; }
-    .rank-num {
-      font-size: 13px;
-      font-weight: 900;
-      width: 20px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-    .rank-num.r1 { color: #F59E0B; }
-    .rank-num.r2 { color: #9CA3AF; }
-    .rank-num.r3 { color: #CD7F32; }
-    .rank-num.r4, .rank-num.r5 { color: var(--gray-400); }
-    .rank-info { flex: 1; min-width: 0; }
-    .rank-name {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--gray-900);
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .rank-bar-track {
-      height: 4px;
-      background: var(--gray-100);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .rank-bar-fill {
-      height: 100%;
-      background: linear-gradient(to right, var(--teal), var(--teal-dark));
-      border-radius: 2px;
-      transition: width 0.6s ease;
-    }
-    .rank-pct { font-size: 11px; color: var(--gray-500); flex-shrink: 0; }
-
-    /* Day rank card */
-    .day-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--gray-100);
-    }
-    .day-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .day-medal { font-size: 18px; flex-shrink: 0; }
-    .day-name { font-size: 14px; font-weight: 700; color: var(--gray-900); flex-shrink: 0; }
-    .day-bar-wrap { flex: 1; }
-    .day-bar-track {
-      height: 5px;
-      background: var(--gray-100);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .day-bar-fill {
-      height: 100%;
-      background: linear-gradient(to right, #F59E0B, #D97706);
-      border-radius: 3px;
-    }
-    .day-pct { font-size: 12px; color: #D97706; font-weight: 700; flex-shrink: 0; }
-
-    /* ── CASE CARDS ── */
-    .case-card {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 20px;
-      margin-bottom: 14px;
-      transition: box-shadow 0.2s;
-    }
-    .case-card:hover { box-shadow: var(--shadow-md); }
-    .case-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .store-icon {
-      width: 46px; height: 46px;
-      border-radius: 13px;
-      background: var(--teal-light);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
-    }
-    .s-name { font-size: 16px; font-weight: 700; }
-    .s-meta { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-
-    .ba-container {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 10px;
-      align-items: center;
-      background: var(--gray-50);
-      border-radius: var(--radius-sm);
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .ba-col { text-align: center; }
-    .ba-period { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.5px; margin-bottom: 6px; }
-    .ba-period.after { color: var(--teal-dark); }
-    .ba-metric { margin-bottom: 10px; }
-    .ba-metric:last-child { margin-bottom: 0; }
-    .ba-num { font-size: 20px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.5px; }
-    .ba-num.after { color: var(--teal-dark); }
-    .ba-numlbl { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
-
-    .arrows-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .arr { font-size: 20px; color: var(--teal); }
-    .grow-pill {
-      background: var(--teal);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 12px;
-      white-space: nowrap;
-    }
-    .grow-pill.orange { background: var(--orange); }
-
-    .metrics-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .m-chip {
-      flex: 1;
-      min-width: 90px;
-      background: var(--teal-light);
-      border-radius: 10px;
-      padding: 10px 8px;
-      text-align: center;
-    }
-    .m-lbl { font-size: 11px; color: var(--gray-600); margin-bottom: 3px; }
-    .m-val { font-size: 14px; font-weight: 700; color: var(--teal-dark); }
-
-    /* ── SALES GUIDE ── */
-    .sg-intro-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-    .sg-intro-chip {
-      padding: 7px 14px; border-radius: 24px; font-size: 12px; font-weight: 700;
-      color: white; cursor: pointer; opacity: 0.9; transition: opacity 0.15s, transform 0.15s;
-      text-decoration: none; display: inline-block;
-    }
-    .sg-intro-chip:hover { opacity: 1; transform: translateY(-1px); }
-    .sg-accordion { border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; box-shadow: var(--shadow-sm); }
-    .sg-hdr {
-      padding: 15px 20px; display: flex; align-items: center; gap: 10px;
-      cursor: pointer; user-select: none;
-    }
-    .sg-rank-badge {
-      background: rgba(255,255,255,0.22); color: white; font-size: 10px; font-weight: 800;
-      padding: 3px 10px; border-radius: 20px; flex-shrink: 0; letter-spacing: 0.3px; white-space: nowrap;
-    }
-    .sg-ttl { font-size: 15px; font-weight: 800; color: white; flex: 1; }
-    .sg-arr { color: rgba(255,255,255,0.8); font-size: 20px; transition: transform 0.25s; flex-shrink: 0; }
-    .sg-arr.open { transform: rotate(90deg); }
-    .sg-body { display: none; background: white; }
-    .sg-body.open { display: block; padding: 20px; }
-
-    .quote-box {
-      background: var(--gray-50); border-radius: var(--radius-sm);
-      border-left: 3px solid var(--gray-300); padding: 14px 16px; margin-bottom: 16px;
-    }
-    .quote-box-lbl { font-size: 11px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.5px; margin-bottom: 10px; }
-    .q-item {
-      font-size: 12px; color: var(--gray-700); line-height: 1.65;
-      padding: 6px 0 6px 16px; border-bottom: 1px solid var(--gray-200); position: relative;
-    }
-    .q-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .q-item::before { content: '"'; position: absolute; left: 0; top: 6px; color: var(--gray-400); font-size: 16px; font-weight: 700; line-height: 1; }
-
-    .resp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-    .resp-card {
-      background: white; border-radius: var(--radius-sm); border: 1.5px solid var(--gray-200);
-      padding: 16px; display: flex; flex-direction: column; gap: 8px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .resp-card:hover { border-color: var(--teal); box-shadow: 0 2px 12px rgba(42,193,188,0.12); }
-    .resp-card.wide { grid-column: span 2; }
-    @media (max-width: 560px) { .resp-card.wide { grid-column: span 1; } }
-    .resp-ttl { font-size: 14px; font-weight: 800; color: var(--gray-900); line-height: 1.35; }
-    .resp-body { font-size: 12px; color: var(--gray-700); line-height: 1.8; flex: 1; }
-    .resp-body .kn { font-weight: 800; color: var(--teal-dark); font-size: 13px; }
-    .resp-body .knr { font-weight: 800; color: #C53030; font-size: 13px; }
-    .resp-ref { font-size: 10px; color: var(--gray-500); background: var(--gray-100); padding: 3px 8px; border-radius: 6px; width: fit-content; margin-top: 4px; }
-
-    /* ── FOOTER ── */
-    .footer {
-      text-align: center;
-      padding: 32px 16px;
-      font-size: 12px;
-      color: var(--gray-500);
-    }
-    /* ── PASSWORD SCREEN ── */
-    #pw-screen {
-      position: fixed;
-      inset: 0;
-      background: var(--gray-50);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .pw-box {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-lg);
-      padding: 40px 36px;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-    .pw-logo { font-size: 32px; margin-bottom: 8px; }
-    .pw-title { font-size: 18px; font-weight: 900; color: var(--gray-900); margin-bottom: 4px; letter-spacing: -0.3px; }
-    .pw-sub { font-size: 13px; color: var(--gray-600); margin-bottom: 28px; }
-    .pw-label { font-size: 12px; font-weight: 600; color: var(--gray-600); text-align: left; display: block; margin-bottom: 6px; }
-    .pw-input-wrap { position: relative; margin-bottom: 12px; }
-    .pw-input {
-      width: 100%;
-      padding: 13px 44px 13px 16px;
-      border: 1.5px solid var(--gray-200);
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      color: var(--gray-900);
-      letter-spacing: 2px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .pw-input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,193,188,0.15); }
-    .pw-input.error { border-color: #E53E3E; box-shadow: 0 0 0 3px rgba(229,62,62,0.15); }
-    .pw-toggle {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--gray-500);
-      font-size: 16px;
-      line-height: 1;
-      padding: 0;
-    }
-    .pw-error-msg {
-      font-size: 12px;
-      color: #E53E3E;
-      text-align: left;
-      margin-bottom: 16px;
-      display: none;
-    }
-    .pw-error-msg.show { display: block; }
-    .pw-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--teal);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s;
-      letter-spacing: -0.2px;
-    }
-    .pw-btn:hover { background: var(--teal-dark); box-shadow: 0 4px 14px rgba(42,193,188,0.4); }
-    .pw-footer-note { font-size: 11px; color: var(--gray-500); margin-top: 20px; }
-  </style>
+@media(max-width:600px) {
+  .result-header { flex-direction:column; }
+  .result-map-wrap { width:100%; }
+  #resultMap { height:160px; }
+  .miss-compare { grid-template-columns:1fr; }
+  .miss-arrow { transform:rotate(90deg); }
+  .tab-btn { font-size:11px; padding:8px 4px; min-width:60px; }
+}
+</style>
 </head>
 <body>
 
@@ -664,151 +311,172 @@
 <div id="pw-screen">
   <div class="pw-box">
     <div class="pw-logo">🛵</div>
-    <div class="pw-title">HV 상담 지원 TOOL</div>
-    <div class="pw-sub">배달의민족 영업 담당자 전용 서비스입니다</div>
-    <label class="pw-label">비밀번호</label>
+    <div class="pw-title">파트너 상권 분석 TOOL</div>
+    <div class="pw-sub">배달의민족 영업 담당자 전용</div>
     <div class="pw-input-wrap">
-      <input class="pw-input" id="pwInput" type="password"
-        placeholder="비밀번호를 입력하세요"
-        onkeydown="if(event.key==='Enter') checkPw()">
-      <button class="pw-toggle" onclick="togglePw()" tabindex="-1" title="비밀번호 표시">👁</button>
+      <input type="password" id="pwInput" placeholder="오늘 날짜 8자리" onkeydown="if(event.key==='Enter')checkPw()" maxlength="8">
+      <button class="pw-eye" onclick="togglePw()">👁</button>
     </div>
-    <div class="pw-error-msg" id="pwError">비밀번호가 올바르지 않습니다.</div>
+    <div class="pw-error" id="pwError">비밀번호가 올바르지 않습니다.</div>
     <button class="pw-btn" onclick="checkPw()">입장하기</button>
     <div class="pw-footer-note">배달의민족 영업 담당자 전용 · 무단 공유 금지</div>
   </div>
 </div>
 
 <script>
-  // 비밀번호: 오늘 날짜 8자리 자동 적용 (예: 20260522)
   function getTodayPw() {
-    const t = new Date();
-    const yyyy = t.getFullYear();
-    const mm   = String(t.getMonth() + 1).padStart(2, '0');
-    const dd   = String(t.getDate()).padStart(2, '0');
+    const t=new Date(), yyyy=t.getFullYear();
+    const mm=String(t.getMonth()+1).padStart(2,'0');
+    const dd=String(t.getDate()).padStart(2,'0');
     return `${yyyy}${mm}${dd}`;
   }
   const ACCESS_PW = getTodayPw();
-
-  (function() {
-    if (sessionStorage.getItem('hvc_auth') === ACCESS_PW) {
-      document.getElementById('pw-screen').style.display = 'none';
-    }
+  (function(){
+    if(sessionStorage.getItem('hvc_auth')===ACCESS_PW)
+      document.getElementById('pw-screen').style.display='none';
   })();
-
-  function checkPw() {
-    const val = document.getElementById('pwInput').value;
-    const inp = document.getElementById('pwInput');
-    const err = document.getElementById('pwError');
-    if (val === ACCESS_PW) {
-      sessionStorage.setItem('hvc_auth', ACCESS_PW);
-      document.getElementById('pw-screen').style.display = 'none';
+  function checkPw(){
+    const val=document.getElementById('pwInput').value;
+    const inp=document.getElementById('pwInput');
+    const err=document.getElementById('pwError');
+    if(val===ACCESS_PW){
+      sessionStorage.setItem('hvc_auth',ACCESS_PW);
+      document.getElementById('pw-screen').style.display='none';
     } else {
-      inp.classList.add('error');
-      err.classList.add('show');
-      inp.value = '';
-      inp.focus();
-      setTimeout(() => { inp.classList.remove('error'); err.classList.remove('show'); }, 3000);
+      inp.classList.add('error'); err.classList.add('show');
+      inp.value=''; inp.focus();
+      setTimeout(()=>{inp.classList.remove('error');err.classList.remove('show');},3000);
     }
   }
-
-  function togglePw() {
-    const inp = document.getElementById('pwInput');
-    inp.type = inp.type === 'password' ? 'text' : 'password';
+  function togglePw(){
+    const inp=document.getElementById('pwInput');
+    inp.type=inp.type==='password'?'text':'password';
   }
 </script>
 
-<!-- ── STICKY HEADER (유의사항 + 헤더) ── -->
+<!-- ── STICKY HEADER ── -->
 <div class="sticky-header">
   <div class="top-notice">
-    <span class="tn-icon">⚠️</span>
-    파트너님 상담 시 활용을 위한 데이터로, 외부 유출되지 않도록 반드시 주의해주시기 바랍니다.
+    <span>⚠️</span> 파트너님 상담 시 활용을 위한 데이터로, 외부 유출되지 않도록 반드시 주의해주시기 바랍니다.
   </div>
   <div class="header-bar">
     <div class="header-inner">
       <div class="logo-area">
-        <div class="logo">🛵 파트너님을 위한 추가 정보 알려드립니다!</div>
-        <div class="tagline">HV 상담 지원 TOOL</div>
+        <div class="logo">🛵 파트너 상권 분석 TOOL</div>
+        <div class="tagline">배달의민족 영업 담당자 전용</div>
       </div>
       <div class="header-badge">영업 담당자 전용</div>
     </div>
   </div>
 </div>
 
+<!-- ── MAIN CONTAINER ── -->
 <div class="container">
 
-  <!-- ── FILTER CARD ── -->
-  <div class="filter-card">
-    <div class="step-row">
-      <span class="step-badge">STEP 1</span>
-      <span class="step-title">지역 선택</span>
+<!-- ════════════════════════════════════════
+     SCREEN 1 : 설정
+════════════════════════════════════════ -->
+<div id="screen-setup">
+
+  <div class="setup-hero">
+    <h1>파트너님 상권을 분석해 드립니다</h1>
+    <p>상호명 또는 주소로 위치를 찾고, 카테고리를 선택하면<br>맞춤 상권 데이터와 영업 인사이트를 제공합니다.</p>
+    <div class="setup-steps">
+      <div class="setup-step"><span class="setup-step-num">1</span> 위치 검색</div>
+      <div class="setup-step"><span class="setup-step-num">2</span> 반경 설정</div>
+      <div class="setup-step"><span class="setup-step-num">3</span> 카테고리 선택</div>
+      <div class="setup-step"><span class="setup-step-num">4</span> 분석하기</div>
     </div>
+  </div>
 
-    <div class="region-row">
-      <div class="select-wrap">
-        <label class="select-label">광역시/도 (rgn1)</label>
-        <div class="select-outer">
-          <select id="rgn1" onchange="onRgn1Change()">
-            <option value="">시/도를 선택하세요</option>
-            <option>서울특별시</option><option>부산광역시</option><option>인천광역시</option>
-            <option>대구광역시</option><option>대전광역시</option><option>광주광역시</option>
-            <option>울산광역시</option><option>세종특별자치시</option><option>경기도</option>
-            <option>강원도</option><option>충청북도</option><option>충청남도</option>
-            <option>전라북도</option><option>전라남도</option><option>경상북도</option>
-            <option>경상남도</option><option>제주특별자치도</option>
-          </select>
-        </div>
-      </div>
-      <div class="select-wrap">
-        <label class="select-label">시/군/구 (rgn2)</label>
-        <div class="select-outer">
-          <select id="rgn2" onchange="onFilterChange()" disabled>
-            <option value="">시/도 먼저 선택하세요</option>
-          </select>
-        </div>
-      </div>
+  <!-- STEP 1+2: 위치 & 반경 -->
+  <div class="setup-card">
+    <div class="setup-card-title"><span>1</span> 파트너님 위치 검색</div>
+    <div class="api-notice" id="mapApiNotice" style="display:none;">
+      ⚙️ <strong>카카오맵 API 키 설정 필요</strong> — JS 상단 <code>KAKAO_API_KEY</code> 변수에 키를 입력해주세요.<br>
+      👉 <a href="https://developers.kakao.com" target="_blank">developers.kakao.com</a> → 앱 키 → JavaScript 키
     </div>
-
-    <div class="divider"></div>
-
-    <div class="step-row">
-      <span class="step-badge">STEP 2</span>
-      <span class="step-title">카테고리 선택</span>
+    <div class="map-search-wrap">
+      <input type="text" class="map-search-inp" id="mapSearchInput"
+             placeholder="상호명 또는 주소 입력 (예: 홍길동 치킨 강남점)"
+             onkeydown="if(event.key==='Enter')searchPlace()"/>
+      <button class="map-search-btn" onclick="searchPlace()">🔍 검색</button>
     </div>
+    <div class="map-places-list" id="mapPlacesList"></div>
+    <div id="setupMap"><div class="map-ph"><span style="font-size:40px;">🗺️</span><span>상호명을 검색하면 지도가 표시됩니다</span></div></div>
+    <div class="radius-bar" id="radiusBar">
+      <span class="radius-lbl">반경 선택</span>
+      <button class="r-btn active" id="r-btn-300" onclick="setRadius(300)">300m</button>
+      <button class="r-btn" id="r-btn-500" onclick="setRadius(500)">500m</button>
+      <button class="r-btn" id="r-btn-1000" onclick="setRadius(1000)">1km</button>
+    </div>
+    <div class="detected-region" id="detectedRegion"></div>
+  </div>
 
-    <div class="category-grid" id="catGrid"></div>
+  <!-- STEP 3: 카테고리 -->
+  <div class="setup-card">
+    <div class="setup-card-title"><span>2</span> 카테고리 선택</div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
 
-    <button class="cta-btn" id="searchBtn" disabled onclick="showResults()">
-      지역과 카테고리를 선택해주세요
+  <!-- ANALYZE BTN -->
+  <div class="analyze-btn-wrap">
+    <button class="analyze-btn" id="analyzeBtn" onclick="startAnalysis()" disabled>
+      📊 분석하기
     </button>
   </div>
 
-  <!-- ── RESULTS ── -->
-  <div class="results" id="results">
+</div><!-- /screen-setup -->
 
-    <div class="selection-bar">
-      <span class="sel-icon">📍</span>
-      <span class="sel-pill" id="pill1">—</span>
-      <span class="sel-sep">›</span>
-      <span class="sel-pill" id="pill2">—</span>
-      <span class="sel-sep">›</span>
-      <span class="sel-pill" id="pill3">—</span>
-      <span class="sel-reset" onclick="resetFilters()">다시 선택</span>
-    </div>
 
-    <!-- ① 파트너님께 드리는 혜택 -->
-    <div class="section-block">
-      <div class="section-head">
-        <div class="section-ttl">🎁 파트너님께 드리는 혜택</div>
+<!-- ════════════════════════════════════════
+     SCREEN 2 : 결과
+════════════════════════════════════════ -->
+<div id="screen-results">
+
+  <!-- 결과 헤더 -->
+  <div class="result-header">
+    <div class="result-summary">
+      <div class="result-partner" id="resultPartnerName">—</div>
+      <div class="result-meta">
+        <span class="result-tag" id="resultRegionTag">—</span>
+        <span class="result-tag" id="resultCatTag">—</span>
+        <span class="result-tag" id="resultRadiusTag">—</span>
       </div>
-      <div class="notice">
-        <span>💡</span>
-        <span>파트너님께 제공할 수 있는 혜택의 종류와 내용은 상황에 따라 변동될 수 있습니다.</span>
-      </div>
-      <div class="promo-grid" id="promoGrid"></div>
+      <div class="result-addr" id="resultAddr"></div>
+      <button class="back-btn" onclick="goBack()">← 다시 설정</button>
     </div>
+    <div class="result-map-wrap">
+      <div id="resultMap"></div>
+      <div class="result-radius-bar" id="resultRadiusBar">
+        <button class="r-btn-sm active" id="rr-300" onclick="setResultRadius(300)">300m</button>
+        <button class="r-btn-sm" id="rr-500" onclick="setResultRadius(500)">500m</button>
+        <button class="r-btn-sm" id="rr-1000" onclick="setResultRadius(1000)">1km</button>
+      </div>
+    </div>
+  </div>
 
-    <!-- ② 파트너님 상권 데이터 (외식업 전체) -->
+  <!-- 탭 바 -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tbtn-market" onclick="switchTab('market')">
+      <span class="tab-num">①</span>상권 진단
+    </button>
+    <button class="tab-btn" id="tbtn-compete" onclick="switchTab('compete')">
+      <span class="tab-num">②</span>경쟁 현황
+    </button>
+    <button class="tab-btn" id="tbtn-miss" onclick="switchTab('miss')">
+      <span class="tab-num">③</span>놓치는 고객
+    </button>
+    <button class="tab-btn" id="tbtn-cases" onclick="switchTab('cases')">
+      <span class="tab-num">④</span>성장 사례
+    </button>
+    <button class="tab-btn" id="tbtn-expect" onclick="switchTab('expect')">
+      <span class="tab-num">⑤</span>예상 성과
+    </button>
+  </div>
+
+  <!-- ① 상권 진단 -->
+  <div class="tab-panel active" id="tab-market">
     <div class="section-block">
       <div class="section-head">
         <div class="section-ttl">🏘️ 파트너님 상권 데이터</div>
@@ -821,24 +489,37 @@
       <div class="stats-grid" id="areaStatsGrid"></div>
       <div class="insight-card" id="areaInsightCard"></div>
     </div>
+  </div>
 
-    <!-- ③ 파트너님 상권 배민 데이터 -->
+  <!-- ② 경쟁 현황 -->
+  <div class="tab-panel" id="tab-compete">
     <div class="section-block">
       <div class="section-head">
-        <div class="section-ttl">📊 파트너님 상권 배민 데이터</div>
+        <div class="section-ttl">📊 배민 상권 데이터</div>
         <span class="badge-sample">샘플 데이터</span>
       </div>
       <div class="notice">
         <span>⚠️</span>
-        <span>실제 데이터 연동 전 구조 확인용 샘플입니다. 실제 수치는 데이터 소스 연결 후 자동으로 반영됩니다.</span>
+        <span>실제 데이터 연동 전 샘플입니다. 배달의민족 플랫폼 기준 입점 현황 및 주문 데이터입니다.</span>
       </div>
       <div class="stats-grid" id="statsGrid"></div>
       <div class="insight-card" id="insightCard"></div>
-      <!-- 인기 메뉴 / 주문 시간대 / 주문 요일 -->
       <div class="rank-grid" id="rankGrid"></div>
     </div>
+  </div>
 
-    <!-- ④ 같은 카테고리 실제 성장 사례 -->
+  <!-- ③ 지금 놓치는 고객 -->
+  <div class="tab-panel" id="tab-miss">
+    <div class="section-block">
+      <div class="section-head">
+        <div class="section-ttl">🚨 지금 이 순간 놓치는 고객</div>
+      </div>
+      <div id="missContent"></div>
+    </div>
+  </div>
+
+  <!-- ④ 성장 사례 -->
+  <div class="tab-panel" id="tab-cases">
     <div class="section-block">
       <div class="section-head">
         <div class="section-ttl">🏆 같은 카테고리 실제 성장 사례</div>
@@ -846,314 +527,37 @@
       </div>
       <div class="notice">
         <span>⚠️</span>
-        <span>실제 입점 파트너 성과 데이터로 교체 예정입니다. 현재는 구조 확인용 샘플 사례입니다.</span>
+        <span>실제 입점 파트너 성과 데이터로 교체 예정입니다. 현재는 구조 확인용 샘플입니다.</span>
       </div>
       <div id="caseContainer"></div>
     </div>
+  </div>
 
-    <!-- ⑤ 거절 반론 극복 가이드 -->
+  <!-- ⑤ 예상 성과 -->
+  <div class="tab-panel" id="tab-expect">
     <div class="section-block">
       <div class="section-head">
-        <div class="section-ttl">🛡️ 거절 반론 극복 가이드</div>
+        <div class="section-ttl">✨ 배민 입점 시 예상 성과</div>
       </div>
-      <div class="notice">
-        <span>💡</span>
-        <span>업주님의 주요 거절 유형별 응대 포인트입니다. 항목을 눌러 세일즈 메시지를 확인하세요.</span>
-      </div>
-
-      <!-- 빠른 이동 칩 -->
-      <div class="sg-intro-chips">
-        <a class="sg-intro-chip" style="background:#C53030" onclick="openSg('sg1')">① 브랜드/서비스 불신</a>
-        <a class="sg-intro-chip" style="background:#C05621" onclick="openSg('sg2')">② 과거 운영 피로도</a>
-        <a class="sg-intro-chip" style="background:#276749" onclick="openSg('sg3')">③ 수익성/수수료 불만</a>
-        <a class="sg-intro-chip" style="background:#2B6CB0" onclick="openSg('sg4')">④ 배차/라이더 이슈</a>
-        <a class="sg-intro-chip" style="background:#553C9A" onclick="openSg('sg5')">⑤ 운영 리스크</a>
-        <a class="sg-intro-chip" style="background:#B7791F" onclick="openSg('sg6')">⑥ 기회비용 계산</a>
-      </div>
-
-      <!-- ① 브랜드/서비스 불신 -->
-      <div class="sg-accordion">
-        <div class="sg-hdr" style="background:#C53030" onclick="toggleSg('sg1')">
-          <span class="sg-rank-badge">실패 1위</span>
-          <span class="sg-ttl">① 브랜드/서비스 불신</span>
-          <span class="sg-arr" id="sg1-arr">›</span>
-        </div>
-        <div class="sg-body" id="sg1-body">
-          <div class="quote-box">
-            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
-            <div class="q-item">배달의민족이라는 이름만 들어도 대화를 거부한다. 고객센터 대응이나 정산 문제로 너무 크게 실망했다.</div>
-            <div class="q-item">한번 해지하고 나갔던 곳이라 다시 들어갈 마음이 전혀 없다. 배민이라는 브랜드 자체에 대한 신뢰가 바닥이다.</div>
-            <div class="q-item">혜택 준다고 꼬드겨서 나중에 뒤통수칠까 봐 절대 안 믿는다.</div>
-          </div>
-          <div class="resp-grid">
-            <div class="resp-card">
-              <div class="resp-ttl">📞 파트너전담센터로 CS 품질이 달라졌습니다</div>
-              <div class="resp-body">
-                고객센터+광고가입센터를 <span class="kn">단일 채널로 통합</span>해 모든 문의를 한 곳에서 해결합니다.<br><br>
-                • 연결 대기시간 <span class="kn">28% 단축</span> (24년 대비 25년)<br>
-                • 점심 피크 대기시간 <span class="kn">55% 감소</span><br>
-                • 주문·배달·정산 문의 <span class="kn">24시간</span> 대응 가능<br><br>
-                이전에 경험하셨던 불편함은 이제 느끼지 않으실 것입니다.
-              </div>
-              <div class="resp-ref">근거: 24년 대비 25년 CS 품질 개선 지표</div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">📊 시장 주도권은 배민에서 잡아야 합니다</div>
-              <div class="resp-body">
-                고객 리서치 결과 배민의 '주 이용률'은 <span class="kn">60.3%</span>로, CPE <span class="knr">28.8%</span> 대비 <span class="kn">▲31.5%p</span> 높습니다.<br><br>
-                배달앱 이용자 중 배민 <span class="kn">단독 이용률 33.4%</span> — 배민에 없으면 10명 중 3명의 고객이 아예 닿지 않습니다.<br><br>
-                압도적 이용률 = 실패 없는 매출 증명
-              </div>
-              <div class="resp-ref">근거: BM only 소비자 데이터 9p, 27p, 54p (25년 11월 기준)</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ② 과거 운영 피로도 -->
-      <div class="sg-accordion">
-        <div class="sg-hdr" style="background:#C05621" onclick="toggleSg('sg2')">
-          <span class="sg-rank-badge">실패 2위</span>
-          <span class="sg-ttl">② 과거 운영 피로도</span>
-          <span class="sg-arr" id="sg2-arr">›</span>
-        </div>
-        <div class="sg-body" id="sg2-body">
-          <div class="quote-box">
-            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
-            <div class="q-item">전에 배달 열었다가 정신이 하나도 없어서 장사를 접을 뻔했다. 그때 운영 피로도를 다시는 겪고 싶지 않다.</div>
-            <div class="q-item">배달 병행하느라 직원이 그만둘 정도로 힘들었던 기억이 있다. 배민까지 하면 다 도망갈 거다.</div>
-            <div class="q-item">매장 운영에 집중 못 하고 포스기만 쳐다보고 있어야 했던 그 스트레스를 다시 감당할 자신이 없다.</div>
-          </div>
-          <div class="resp-grid">
-            <div class="resp-card">
-              <div class="resp-ttl">📷 QR 오픽업 — 라이더 소통 걱정 끝</div>
-              <div class="resp-body">
-                라이더가 영수증 QR(또는 주문번호)을 직접 입력해 음식을 수령합니다.<br><br>
-                파트너님이 라이더와 일일이 확인할 필요가 <span class="kn">없어졌습니다.</span><br>
-                음식 픽업에 신경 쓸 일이 사라진 것이죠.
-              </div>
-              <div class="resp-ref">25년 2월 23일 도입</div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">📱 라이더 안심번호 — 직접 소통 가능</div>
-              <div class="resp-body">
-                메뉴 누락이나 픽업 지연 시, 고객센터를 거치지 않고 <span class="kn">라이더와 직접 통화</span>가 가능합니다.<br><br>
-                기존의 번거로운 중간 단계가 모두 사라졌습니다.
-              </div>
-              <div class="resp-ref">24년 10월 29일 도입</div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">✂️ 부분취소 — 고객센터 연결 없이 직접 처리</div>
-              <div class="resp-body">
-                메뉴 품절 시 주문접수채널에서 <span class="kn">직접 부분취소</span>가 가능합니다.<br><br>
-                바쁜 피크 타임에 고객센터 대기 없이 즉시 처리할 수 있어 운영 피로도가 크게 줄었습니다.
-              </div>
-              <div class="resp-ref">25년 3월 18일 도입</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ③ 수익성/수수료 불만 + 순수익 의구심 -->
-      <div class="sg-accordion">
-        <div class="sg-hdr" style="background:#276749" onclick="toggleSg('sg3')">
-          <span class="sg-rank-badge">실패 3위 · 7위 통합</span>
-          <span class="sg-ttl">③ 수익성/수수료 불만 · 순수익 의구심</span>
-          <span class="sg-arr" id="sg3-arr">›</span>
-        </div>
-        <div class="sg-body" id="sg3-body">
-          <div class="quote-box">
-            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
-            <div class="q-item">예전에 정산금 들어온 거 보고 기함했다. 고생은 고생대로 하고 수수료로 다 떼어가는 걸 직접 경험해보니 다신 하기 싫다.</div>
-            <div class="q-item">배달 매출 1,000만 원 찍어봤자 식자재비 빼고 수수료 빼고 나면, 홀 매출 300만 원 올린 것보다 순수익이 적은데 왜 해야 하나.</div>
-            <div class="q-item">겉만 화려한 배달보다 내실 있는 홀 장사가 최고다. 배달은 빛 좋은 개살구다.</div>
-          </div>
-          <div class="resp-grid">
-            <div class="resp-card wide">
-              <div class="resp-ttl">⏱️ 마진율이 아니라 '시간당 매출 생산성'으로 비교하세요</div>
-              <div class="resp-body">
-                홀 테이블 1개가 1시간 동안 만드는 매출보다, 동일 시간 내 배민 배달 주문의 합산 매출이 더 큽니다.<br><br>
-                📐 <strong>15평 · 10테이블 매장 기준</strong><br>
-                • 홀: 10테이블 × 1회전(60분) × 3만원 = <span class="knr">시간당 30만원</span><br>
-                • 배달: 주방 동시 조리 5건 × 4회전(15분) × 2.5만원 = <span class="kn">시간당 50만원</span><br><br>
-                수수료를 감안해도 시간당 매출 생산성은 배달이 더 실속있는 수단입니다.
-              </div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">📈 배민 입점 후 배달매출 총량이 증가합니다</div>
-              <div class="resp-body">
-                타사 매출이 빠지는 것이 아니라, 전체 배달매출이 상승하며 3개월 이후에도 유지됩니다.<br><br>
-                • 서울: 입점 1개월 후 <span class="kn">+26.3%</span> → 3개월 후 +32.4%<br>
-                • 경인: 입점 1개월 후 <span class="kn">+173.6%</span> → 3개월 후 +185.4%<br>
-                • 지방 광역시: <span class="kn">+140.3%</span> → +117.7%<br>
-                • 지방 도시: <span class="kn">+240.2%</span> → +103.8%
-              </div>
-              <div class="resp-ref">근거: 셀기실 매출 분석 데이터</div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">💰 증가한 배달매출의 대부분이 배민에서 발생합니다</div>
-              <div class="resp-body">
-                배민 입점 후 1개월, 증가한 배달매출 중 배민 기여도:<br><br>
-                • 서울: <span class="kn">약 107%</span> — 증가분 전부가 배민 매출<br>
-                • 경인: 약 60%<br>
-                • 지방 광역시: 약 71%<br>
-                • 지방 도시: 약 61%<br><br>
-                입점 3개월 후에도 전체 배달매출의 <span class="kn">24~57%</span>가 배민 매출로 안정적 형성
-              </div>
-              <div class="resp-ref">근거: 셀기실 매출 분석 데이터</div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">🧮 수익계산기로 수수료 오해 직접 해소</div>
-              <div class="resp-body">
-                세일즈포스 수익계산기를 활용해 지역·객단가·일 주문수·중개이용료·배달비·수수료·원가 입력 시 <span class="kn">일간·월간 예상 수익</span>을 실제 금액으로 확인할 수 있습니다.<br><br>
-                총 매출 / 비용 / 순수익을 눈으로 보여주며 수수료 오해를 해소하세요.
-              </div>
-              <a href="https://woowahan.lightning.force.com/lightning/popout/utility?0.windowed=true"
-                 target="_blank" rel="noopener"
-                 style="display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:8px 14px;background:var(--teal);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:background 0.2s;"
-                 onmouseover="this.style.background='var(--teal-dark)'" onmouseout="this.style.background='var(--teal)'">
-                🔗 수익계산기 바로가기
-              </a>
-              <div class="resp-ref" style="margin-top:6px;">세일즈포스 로그인 후 이용 가능</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ④ 배차/라이더 이슈 -->
-      <div class="sg-accordion">
-        <div class="sg-hdr" style="background:#2B6CB0" onclick="toggleSg('sg4')">
-          <span class="sg-rank-badge">실패 4위</span>
-          <span class="sg-ttl">④ 배차/라이더 이슈</span>
-          <span class="sg-arr" id="sg4-arr">›</span>
-        </div>
-        <div class="sg-body" id="sg4-body">
-          <div class="quote-box">
-            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
-            <div class="q-item">배민 기사가 30분 넘게 안 와서 음식이 다 식어버리고, 손님한테 쌍욕 먹고 환불해줬던 트라우마가 아직도 생생하다.</div>
-            <div class="q-item">배달 지연으로 악성 리뷰 달리는 걸 보면서 배민 라이더 시스템에 정이 다 떨어졌다. 쿠팡은 그런 면에서 훨씬 관리가 잘 된다.</div>
-            <div class="q-item">기사가 픽업을 안 와서 내가 직접 배달 나갔던 적도 있다. 그런 배차 리스크를 다시 지고 싶지 않다.</div>
-          </div>
-          <div class="resp-grid">
-            <div class="resp-card wide">
-              <div class="resp-ttl">🚀 전국 배차시간·배달시간 대폭 단축 (24년 대비 25년)</div>
-              <div class="resp-body">
-                • 수도권: 배차시간 <span class="kn">6.5% 단축</span>, 픽업시간 4% 단축<br>
-                • 충청권: 배차시간 <span class="kn">19.6% 단축</span>, 배달시간 2.7% 단축<br>
-                • 영남권: 배차시간 <span class="kn">18.4% 단축</span>, 배달시간 3.4% 단축<br>
-                • 호남권: 배차시간 <span class="kn">28.2% 단축</span>, 배달시간 4.5% 단축<br>
-                • 강원도: 배차시간 12.8% 단축 / 제주도: 배차시간 22.2% 단축
-              </div>
-              <div class="resp-ref">근거: 배달 품질 지표 (24년 대비 25년)</div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">🏆 라이더 인센티브 강화로 배차 안정성 향상</div>
-              <div class="resp-body">
-                ① <strong>2주 등급제</strong>: 월 단위 → 2주 단위 등급 산정으로 더 빠른 피드백, 촘촘한 관리<br><br>
-                ② <strong>환경 포인트</strong>: 거리·시간·기상·휴일에 따른 추가 포인트 지급<br><br>
-                ③ <strong>등급별 할증제</strong>: 정액제에서 변경, 피크 타임에도 라이더 수익 강화 → 안정적 배차 보장
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ⑤ 운영 리스크 -->
-      <div class="sg-accordion">
-        <div class="sg-hdr" style="background:#553C9A" onclick="toggleSg('sg5')">
-          <span class="sg-rank-badge">실패 5위</span>
-          <span class="sg-ttl">⑤ 운영 리스크</span>
-          <span class="sg-arr" id="sg5-arr">›</span>
-        </div>
-        <div class="sg-body" id="sg5-body">
-          <div class="quote-box">
-            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
-            <div class="q-item">홀 손님 응대만으로도 주방이 꽉 차는데, 배달 주문까지 섞이면 순서가 꼬이고 실수가 나와서 단골 손님들까지 놓칠까 봐 겁난다.</div>
-            <div class="q-item">배달 기사들이 매장 앞에서 서성이는 것 자체가 홀 분위기를 망치고, 홀 손님들이 불편해하는 리스크를 감수하고 싶지 않다.</div>
-            <div class="q-item">피크 타임에 배달 주문이 몰리면 홀 서비스 질이 급격히 떨어진다.</div>
-          </div>
-          <div class="resp-grid">
-            <div class="resp-card">
-              <div class="resp-ttl">⚙️ 시스템 개선으로 홀 운영 부담 최소화</div>
-              <div class="resp-body">
-                • <strong>QR 오픽업</strong> (25.2.23): 라이더가 스스로 확인·수령 → 파트너 개입 불필요<br>
-                • <strong>안심번호</strong> (24.10.29): 라이더와 직접 통화 가능<br>
-                • <strong>부분취소</strong> (25.3.18): 품절 즉시 직접 처리<br><br>
-                배달이 홀 운영에 부담 주던 시대는 끝났습니다.
-              </div>
-              <div class="resp-ref">근거: 3가지 시스템 개선 도입 이력</div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">👥 배민 미입점 시 10명 중 3명의 고객을 잃습니다</div>
-              <div class="resp-body">
-                배달앱 이용자 중 배민 <span class="kn">단독 이용률 33.4%</span> — 배민에만 접속하는 고객입니다.<br><br>
-                • 지방 광역시: <span class="kn">43.9%</span>가 배민 단독 이용<br>
-                • 지방 도시: <span class="kn">47.3%</span>가 배민 단독 이용<br><br>
-                운영 부담 걱정보다, 놓치는 고객이 더 큰 리스크입니다.
-              </div>
-              <div class="resp-ref">근거: BM only 소비자 데이터 27p (25년 11월 기준)</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ⑥ 기회비용 계산 -->
-      <div class="sg-accordion">
-        <div class="sg-hdr" style="background:#B7791F" onclick="toggleSg('sg6')">
-          <span class="sg-rank-badge">실패 6위</span>
-          <span class="sg-ttl">⑥ 기회비용 계산</span>
-          <span class="sg-arr" id="sg6-arr">›</span>
-        </div>
-        <div class="sg-body" id="sg6-body">
-          <div class="quote-box">
-            <div class="quote-box-lbl">💬 업주님 주요 반응</div>
-            <div class="q-item">배달용 포장 용기 준비하고 라이더 응대할 시간에 홀 손님 고기 한 점 더 구워드리는 게 장기적으로 훨씬 이득이다.</div>
-            <div class="q-item">배달은 주문 들어올 때마다 신경이 분산된다. 그 에너지를 매장 방문객 만족도에 집중하는 게 기회비용 측면에서 낫다.</div>
-            <div class="q-item">우리 매장은 '공간의 경험'이 핵심인데, 배달로 나가면 그 가치를 전달할 수 없다. 홀 회전율에 집중하겠다.</div>
-          </div>
-          <div class="resp-grid">
-            <div class="resp-card">
-              <div class="resp-ttl">⚙️ 배달 운영 리소스는 최소화됩니다</div>
-              <div class="resp-body">
-                QR 오픽업·안심번호·부분취소 도입으로 배달 운영에 쏟아야 했던 시간과 에너지가 크게 줄었습니다.<br><br>
-                <span class="kn">홀 집중도를 유지하면서도 추가 매출 채널을 확보</span>할 수 있는 구조로 바뀌었습니다.
-              </div>
-              <div class="resp-ref">25년 2~3월 시스템 개선 3종 도입</div>
-            </div>
-            <div class="resp-card wide">
-              <div class="resp-ttl">⏱️ 홀 집중 vs 배달 병행 — 시간당 매출로 비교하세요</div>
-              <div class="resp-body">
-                📐 <strong>15평 · 10테이블 매장 기준</strong><br>
-                • 홀: 10테이블 × 1회전(60분) × 3만원 = <span class="knr">시간당 30만원</span><br>
-                • 배달: 주방 동시 조리 5건 × 4회전(15분) × 2.5만원 = <span class="kn">시간당 50만원</span><br><br>
-                같은 1시간, 같은 주방을 쓰는데 배달의 시간당 매출 생산성이 더 높습니다.<br>
-                기회비용을 따진다면, 배민 미입점이 더 큰 손실입니다.
-              </div>
-            </div>
-            <div class="resp-card">
-              <div class="resp-ttl">📊 배민의 압도적 이용률 = 놓치는 매출 기회</div>
-              <div class="resp-body">
-                배달앱 현재 이용률(25년 11월 기준):<br>
-                • 서울: 배민 <span class="kn">84.6%</span> vs CPE <span class="knr">64.8%</span><br>
-                • 지방 광역시: 배민 <span class="kn">87.8%</span> vs CPE <span class="knr">50.0%</span><br>
-                • 지방 도시: 배민 <span class="kn">85.5%</span> vs CPE <span class="knr">39.8%</span><br><br>
-                홀 집중이 기회비용이 낫다고 생각하실 때, 배민 고객층의 이 매출을 놓치고 있습니다.
-              </div>
-              <div class="resp-ref">근거: BM only 소비자 데이터 54p</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div id="expectContent"></div>
     </div>
-
   </div>
-</div>
+
+</div><!-- /screen-results -->
+
+</div><!-- /container -->
 
 <div class="footer">배달의민족 파트너전담센터 1600-2111 &nbsp;|&nbsp; 배달의민족 영업 담당자 전용</div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+// KAKAO API KEY
+// ══════════════════════════════════════════════════
+const KAKAO_API_KEY = '__KAKAO_API_KEY__'; // ← 카카오 JavaScript API 키 입력
+
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
 const REGIONS = {
   '서울특별시': ['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'],
   '부산광역시': ['강서구','금정구','기장군','남구','동구','동래구','부산진구','북구','사상구','사하구','서구','수영구','연제구','영도구','중구','해운대구'],
@@ -1192,32 +596,6 @@ const CATEGORIES = [
   { id:'night',    name:'야식',       emoji:'🌙' }
 ];
 
-// 혜택 카드 4종
-const PROMOTIONS = [
-  {
-    name: '중개이용료 지원',
-    type: '수수료 지원', tagClass: 'tag-teal', cardClass: '',
-    desc: '상세 내용 추후 반영',
-    benefitLabel: '지원 방식', benefit: '중개이용료 최대 OO% 지원 (조건 및 기간 확인 필요)',
-    tags: ['수수료 절감', '초기 지원', '수익성']
-  },
-  {
-    name: '배달비 지원',
-    type: '배달비 지원', tagClass: 'tag-orange', cardClass: 'orange-top',
-    desc: '상세 내용 추후 반영',
-    benefitLabel: '지원 구조', benefit: '배민 분담 + 파트너 분담 (비율 조정 가능)',
-    tags: ['파트너 부담 절감', '전환율', '탄력 설정']
-  },
-  {
-    name: "'줄서는맛집' 큐레이션 노출",
-    type: '프리미엄 큐레이션', tagClass: 'tag-teal', cardClass: '',
-    desc: '상세 내용 추후 반영',
-    benefitLabel: '노출 효과', benefit: '앱 내 프리미엄 큐레이션 섹션 노출',
-    tags: ['브랜드 가치', '신규 유입', '신뢰도']
-  }
-];
-
-// 카테고리별 인기 메뉴
 const CAT_MENUS = {
   '치킨':      ['양념치킨','후라이드치킨','반반치킨','순살치킨','간장치킨'],
   '중식':      ['짜장면','짬뽕','탕수육','볶음밥','군만두'],
@@ -1244,119 +622,314 @@ const ORDER_TIMES = [
   { label: '20:00 ~ 21:00', tag: '야간 초입' },
   { label: '13:00 ~ 14:00', tag: '점심 후반' }
 ];
-const TIME_PCTS = [100, 87, 71, 55, 40];
 
-// 주문 요일 top 3 (고정)
-const ORDER_DAYS = [
-  { day: '금요일', medal: '🥇', pct: 100 },
-  { day: '토요일', medal: '🥈', pct: 91 },
-  { day: '일요일', medal: '🥉', pct: 82 }
+
+const CATEGORIES = [
+  {id:'한식',icon:'🍚'}, {id:'치킨',icon:'🍗'}, {id:'피자',icon:'🍕'},
+  {id:'중식',icon:'🥡'}, {id:'일식',icon:'🍱'}, {id:'분식',icon:'🥢'},
+  {id:'족발/보쌈',icon:'🐷'}, {id:'카페/디저트',icon:'☕'},
+  {id:'패스트푸드',icon:'🍔'}, {id:'샐러드',icon:'🥗'},
 ];
 
-// ── STATE ──────────────────────────────────────────────────────
-let selCat = null;
+const CASE_DATA = {
+  '치킨': [
+    {icon:'🍗', name:'노원 바삭통닭', meta:'서울 노원구 · 치킨', chips:[
+      {l:'입점 전 월매출',v:'580만원'},{l:'3개월차 총매출',v:'1,240만원'},
+      {l:'배달 신규고객',v:'월 +312명'},{l:'주문 성장률',v:'+114%'}]},
+    {icon:'🍗', name:'수원 황금치킨', meta:'경기 수원시 · 치킨', chips:[
+      {l:'입점 전 월매출',v:'720만원'},{l:'3개월차 총매출',v:'1,580만원'},
+      {l:'배달 신규고객',v:'월 +425명'},{l:'주문 성장률',v:'+119%'}]},
+  ],
+  '한식': [
+    {icon:'🍚', name:'마포 집밥한상', meta:'서울 마포구 · 한식', chips:[
+      {l:'입점 전 월매출',v:'890만원'},{l:'3개월차 총매출',v:'1,920만원'},
+      {l:'배달 신규고객',v:'월 +518명'},{l:'주문 성장률',v:'+116%'}]},
+  ],
+  '피자': [
+    {icon:'🍕', name:'분당 화덕피자', meta:'경기 성남시 · 피자', chips:[
+      {l:'입점 전 월매출',v:'1,100만원'},{l:'3개월차 총매출',v:'2,350만원'},
+      {l:'배달 신규고객',v:'월 +620명'},{l:'주문 성장률',v:'+114%'}]},
+  ],
+};
 
-// ── INIT ──────────────────────────────────────────────────────
-(function init() {
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let _mapInst = null, _resultMapInst = null;
+let _mapMkr = null, _mapCir = null;
+let _resultMkr = null, _resultCir = null;
+let _mapPos = null, _mapRadius = 300;
+let _detectedR1 = '', _detectedR2 = '', _detectedDong = '';
+let _selectedCat = '', _partnerName = '', _partnerAddr = '';
+window._mapPlaces = [];
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  renderCatChips();
+  refreshAnalyzeBtn();
+});
+
+function renderCatChips() {
   const grid = document.getElementById('catGrid');
-  CATEGORIES.forEach(c => {
-    const btn = document.createElement('button');
-    btn.className = 'cat-chip';
-    btn.textContent = c.emoji + ' ' + c.name;
-    btn.dataset.id = c.id;
-    btn.onclick = () => selectCat(c.id, c.name, btn);
-    grid.appendChild(btn);
-  });
-})();
+  grid.innerHTML = CATEGORIES.map(c =>
+    `<div class="cat-chip" id="cat-${c.id}" onclick="selectCat('${c.id}')">${c.icon} ${c.id}</div>`
+  ).join('');
+}
 
-// ── HANDLERS ──────────────────────────────────────────────────
-function onRgn1Change() {
-  const rgn1 = document.getElementById('rgn1').value;
-  const sel2 = document.getElementById('rgn2');
-  sel2.innerHTML = '<option value="">시/군/구를 선택하세요</option>';
-  if (rgn1 && REGIONS[rgn1]) {
-    REGIONS[rgn1].forEach(d => {
-      const o = document.createElement('option');
-      o.value = d; o.textContent = d;
-      sel2.appendChild(o);
+function selectCat(id) {
+  _selectedCat = id;
+  document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('cat-' + id);
+  if (el) el.classList.add('active');
+  refreshAnalyzeBtn();
+}
+
+function refreshAnalyzeBtn() {
+  const btn = document.getElementById('analyzeBtn');
+  const ready = _mapPos && _detectedR2 && _selectedCat;
+  btn.disabled = !ready;
+}
+
+// ══════════════════════════════════════════════════
+// KAKAO MAP
+// ══════════════════════════════════════════════════
+function _loadKakao(cb) {
+  if (window.kakao && window.kakao.maps && window.kakao.maps.services) { cb(); return; }
+  if (!KAKAO_API_KEY || KAKAO_API_KEY === '__KAKAO_API_KEY__') {
+    document.getElementById('mapApiNotice').style.display = 'block';
+    return;
+  }
+  const s = document.createElement('script');
+  s.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=' + KAKAO_API_KEY + '&libraries=services&autoload=false';
+  s.onload = function() { kakao.maps.load(cb); };
+  document.head.appendChild(s);
+}
+
+function searchPlace() {
+  const kw = (document.getElementById('mapSearchInput').value || '').trim();
+  if (!kw) return;
+  document.getElementById('mapPlacesList').innerHTML =
+    '<div style="padding:10px;font-size:13px;color:var(--gray-500);">🔍 검색 중...</div>';
+  _loadKakao(function() {
+    const ps = new kakao.maps.services.Places();
+    ps.keywordSearch(kw, function(data, status) {
+      if (status === kakao.maps.services.Status.OK) _showList(data);
+      else document.getElementById('mapPlacesList').innerHTML =
+        '<div style="padding:10px;font-size:13px;color:var(--gray-500);">검색 결과가 없습니다.</div>';
     });
-    sel2.disabled = false;
+  });
+}
+
+function _showList(places) {
+  window._mapPlaces = places;
+  const list = document.getElementById('mapPlacesList');
+  if (places.length === 1) { _pinPlace(places[0]); list.innerHTML = ''; return; }
+  list.innerHTML = places.slice(0, 5).map(function(p, i) {
+    const cat = p.category_name ? p.category_name.split(' > ').pop() : '';
+    return '<div class="map-place-item" onclick="_pinPlace(window._mapPlaces[' + i + ']);document.getElementById('mapPlacesList').innerHTML=''">'
+      + '<div><span class="map-place-name">' + p.place_name + '</span>'
+      + (cat ? '<span class="map-place-cat">' + cat + '</span>' : '')
+      + '</div><div class="map-place-addr">' + p.address_name + '</div></div>';
+  }).join('');
+}
+
+function _pinPlace(place) {
+  const lat = parseFloat(place.y), lng = parseFloat(place.x);
+  _mapPos = new kakao.maps.LatLng(lat, lng);
+  _partnerName = place.place_name;
+  _partnerAddr = place.address_name;
+
+  const container = document.getElementById('setupMap');
+  if (!_mapInst) {
+    container.innerHTML = '';
+    _mapInst = new kakao.maps.Map(container, { center: _mapPos, level: 4 });
   } else {
-    sel2.innerHTML = '<option value="">시/도 먼저 선택하세요</option>';
-    sel2.disabled = true;
+    _mapInst.setCenter(_mapPos); _mapInst.setLevel(4);
   }
-  refreshBtn();
+  if (_mapMkr) _mapMkr.setMap(null);
+  _mapMkr = new kakao.maps.Marker({ position: _mapPos, map: _mapInst });
+  const iw = new kakao.maps.InfoWindow({
+    content: '<div style="padding:5px 10px;font-size:13px;font-weight:700;color:#1A9E9A;">' + place.place_name + '</div>'
+  });
+  iw.open(_mapInst, _mapMkr);
+  _drawCircle(_mapRadius);
+  document.getElementById('radiusBar').style.display = 'flex';
+
+  // Reverse geocoding
+  _detectRegion(_mapPos);
 }
 
-function onFilterChange() { refreshBtn(); }
-
-function selectCat(id, name, el) {
-  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  selCat = { id, name };
-  refreshBtn();
+function _detectRegion(latlng) {
+  if (!window.kakao || !kakao.maps.services) return;
+  const geocoder = new kakao.maps.services.Geocoder();
+  geocoder.coord2RegionCode(latlng.getLng(), latlng.getLat(), function(result, status) {
+    if (status !== kakao.maps.services.Status.OK) return;
+    let r1 = '', r2 = '', dong = '';
+    for (let i = 0; i < result.length; i++) {
+      if (result[i].region_type === 'H') {
+        r1   = result[i].region_1depth_name;
+        r2   = result[i].region_2depth_name;
+        dong = result[i].region_3depth_name;
+        break;
+      }
+    }
+    if (!r1 && result[0]) {
+      r1   = result[0].region_1depth_name;
+      r2   = result[0].region_2depth_name;
+      dong = result[0].region_3depth_name;
+    }
+    _detectedR1 = r1; _detectedR2 = r2; _detectedDong = dong;
+    const regionEl = document.getElementById('detectedRegion');
+    regionEl.style.display = 'block';
+    regionEl.innerHTML = '📍 인식된 위치: <strong>' + r1 + ' ' + r2 + '</strong>'
+      + (dong ? ' <span style="color:var(--gray-500)">(' + dong + ')</span>' : '')
+      + ' — 해당 지역 상권 데이터가 분석에 적용됩니다.';
+    refreshAnalyzeBtn();
+  });
 }
 
-function refreshBtn() {
-  const r1 = document.getElementById('rgn1').value;
-  const r2 = document.getElementById('rgn2').value;
-  const btn = document.getElementById('searchBtn');
-  if (r1 && r2 && selCat) {
-    btn.disabled = false;
-    btn.textContent = `${r2} · ${selCat.name} 정보 보기 →`;
-  } else {
-    btn.disabled = true;
-    btn.textContent = '지역과 카테고리를 선택해주세요';
+function _drawCircle(r) {
+  if (_mapCir) _mapCir.setMap(null);
+  if (!_mapInst) return;
+  _mapCir = new kakao.maps.Circle({
+    center: _mapPos, radius: r,
+    strokeWeight: 2, strokeColor: '#2AC1BC', strokeOpacity: 0.9, strokeStyle: 'solid',
+    fillColor: '#2AC1BC', fillOpacity: 0.08, map: _mapInst
+  });
+}
+
+function setRadius(r) {
+  _mapRadius = r;
+  [300, 500, 1000].forEach(function(v) {
+    const b = document.getElementById('r-btn-' + v);
+    if (b) b.classList.toggle('active', v === r);
+  });
+  if (_mapPos && _mapInst) {
+    _drawCircle(r);
+    _mapInst.setLevel(r <= 300 ? 4 : r <= 500 ? 5 : 6);
+  }
+  refreshAnalyzeBtn();
+}
+
+// ══════════════════════════════════════════════════
+// SCREEN TRANSITION
+// ══════════════════════════════════════════════════
+function startAnalysis() {
+  if (!_mapPos || !_detectedR2 || !_selectedCat) {
+    alert('위치를 검색하고 카테고리를 선택해주세요.'); return;
+  }
+  // Render all results first
+  renderAllResults(_detectedR1, _detectedR2, _selectedCat);
+  // Animate transition
+  const s1 = document.getElementById('screen-setup');
+  s1.classList.add('fade-out');
+  setTimeout(function() {
+    s1.style.display = 'none';
+    s1.classList.remove('fade-out');
+    const s2 = document.getElementById('screen-results');
+    s2.style.display = 'block';
+    s2.classList.add('fade-in');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Init result map
+    setTimeout(initResultMap, 100);
+    setTimeout(function() { s2.classList.remove('fade-in'); }, 400);
+  }, 260);
+}
+
+function goBack() {
+  const s2 = document.getElementById('screen-results');
+  s2.classList.add('fade-out');
+  setTimeout(function() {
+    s2.style.display = 'none'; s2.classList.remove('fade-out');
+    const s1 = document.getElementById('screen-setup');
+    s1.style.display = 'block'; s1.classList.add('fade-in');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(function() { s1.classList.remove('fade-in'); }, 400);
+  }, 260);
+}
+
+function initResultMap() {
+  if (!_mapPos) return;
+  _loadKakao(function() {
+    const container = document.getElementById('resultMap');
+    if (!container) return;
+    if (!_resultMapInst) {
+      _resultMapInst = new kakao.maps.Map(container, { center: _mapPos, level: 4 });
+    } else {
+      _resultMapInst.setCenter(_mapPos);
+      _resultMapInst.relayout();
+    }
+    if (_resultMkr) _resultMkr.setMap(null);
+    _resultMkr = new kakao.maps.Marker({ position: _mapPos, map: _resultMapInst });
+    _drawResultCircle(_mapRadius);
+    // Sync radius buttons
+    [300,500,1000].forEach(function(v){
+      const b = document.getElementById('rr-'+v);
+      if(b) b.classList.toggle('active', v===_mapRadius);
+    });
+  });
+}
+
+function _drawResultCircle(r) {
+  if (_resultCir) _resultCir.setMap(null);
+  if (!_resultMapInst) return;
+  _resultCir = new kakao.maps.Circle({
+    center: _mapPos, radius: r,
+    strokeWeight: 2, strokeColor: '#2AC1BC', strokeOpacity: 0.9, strokeStyle: 'solid',
+    fillColor: '#2AC1BC', fillOpacity: 0.1, map: _resultMapInst
+  });
+}
+
+function setResultRadius(r) {
+  _mapRadius = r;
+  [300,500,1000].forEach(function(v){
+    const b1 = document.getElementById('r-btn-'+v), b2 = document.getElementById('rr-'+v);
+    if(b1) b1.classList.toggle('active', v===r);
+    if(b2) b2.classList.toggle('active', v===r);
+  });
+  if (_mapPos) {
+    if (_mapInst) { _drawCircle(r); _mapInst.setLevel(r<=300?4:r<=500?5:6); }
+    if (_resultMapInst) { _drawResultCircle(r); _resultMapInst.setLevel(r<=300?4:r<=500?5:6); }
   }
 }
 
-function resetFilters() {
-  document.getElementById('results').classList.remove('visible');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+// ══════════════════════════════════════════════════
+// TAB SWITCHER
+// ══════════════════════════════════════════════════
+const TAB_IDS = ['market','compete','miss','cases','expect'];
+function switchTab(id) {
+  TAB_IDS.forEach(function(t) {
+    document.getElementById('tab-'+t).classList.remove('active');
+    document.getElementById('tbtn-'+t).classList.remove('active');
+  });
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('tbtn-'+id).classList.add('active');
+  if (id==='compete' && _resultMapInst) setTimeout(function(){ _resultMapInst.relayout(); },50);
 }
 
-// ── SHOW RESULTS ──────────────────────────────────────────────
-function showResults() {
-  const r1 = document.getElementById('rgn1').value;
-  const r2 = document.getElementById('rgn2').value;
-  const cat = selCat.name;
-
-  document.getElementById('pill1').textContent = r1;
-  document.getElementById('pill2').textContent = r2;
-  document.getElementById('pill3').textContent = cat;
-
-  renderPromos();
+// ══════════════════════════════════════════════════
+// RENDER ALL
+// ══════════════════════════════════════════════════
+function renderAllResults(r1, r2, cat) {
+  // Update header
+  document.getElementById('resultPartnerName').textContent = _partnerName || '파트너님 상호';
+  document.getElementById('resultRegionTag').textContent = r2 || r1;
+  document.getElementById('resultCatTag').textContent = cat;
+  document.getElementById('resultRadiusTag').textContent = _mapRadius >= 1000 ? '1km 반경' : _mapRadius + 'm 반경';
+  document.getElementById('resultAddr').textContent = _partnerAddr;
   renderAreaData(r1, r2, cat);
   renderBaeminStats(r1, r2, cat);
-  renderCases(cat);
-
-  const res = document.getElementById('results');
-  res.classList.add('visible');
-  setTimeout(() => res.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+  renderMissedCustomers(r1, r2, cat);
+  renderCaseCards(cat);
+  renderExpectedResults(r1, r2, cat);
+  switchTab('market');
 }
 
-// ── RENDER: PROMOS ────────────────────────────────────────────
-function renderPromos() {
-  const g = document.getElementById('promoGrid');
-  g.innerHTML = '';
-  PROMOTIONS.forEach(p => {
-    const d = document.createElement('div');
-    d.className = 'promo-card ' + (p.cardClass || '');
-    d.innerHTML = `
-      <span class="promo-type-tag ${p.tagClass}">${p.type}</span>
-      <div class="promo-name">${p.name}</div>
-      <div class="promo-desc">${p.desc}</div>
-      <div class="promo-benefit-box">
-        <div class="pb-label">${p.benefitLabel}</div>
-        <div class="pb-value">${p.benefit}</div>
-      </div>
-      <div class="promo-tags-row">${p.tags.map(t=>`<span class="p-tag">${t}</span>`).join('')}</div>
-    `;
-    g.appendChild(d);
-  });
-}
-
-// ── RENDER: 파트너님 상권 데이터 (외식업 전체, 비배달 포함) ────
+// ══════════════════════════════════════════════════
+// ① 상권 진단
+// ══════════════════════════════════════════════════
 function renderAreaData(r1, r2, cat) {
   const seed = (r1.length * 5 + r2.length * 9 + cat.length * 7) % 8;
   const M = [0.75, 0.9, 1.0, 1.15, 1.3, 1.45, 1.65, 1.9][seed];
@@ -1415,7 +988,11 @@ function renderAreaData(r1, r2, cat) {
   `;
 }
 
-// ── RENDER: 파트너님 상권 배민 데이터 ────────────────────────
+
+
+// ══════════════════════════════════════════════════
+// ② 경쟁 현황
+// ══════════════════════════════════════════════════
 function renderBaeminStats(r1, r2, cat) {
   const seed = (r1.length * 3 + r2.length * 7 + cat.length * 11) % 8;
   const M = [0.7, 0.85, 1.0, 1.1, 1.25, 1.4, 1.6, 1.8][seed];
@@ -1476,6 +1053,7 @@ function renderBaeminStats(r1, r2, cat) {
   // 인기 메뉴, 주문 시간대, 요일 rank cards
   renderRankCards(cat);
 }
+
 
 function renderRankCards(cat) {
   const menus = CAT_MENUS[cat] || ['메뉴1','메뉴2','메뉴3','메뉴4','메뉴5'];
@@ -1545,116 +1123,193 @@ function renderRankCards(cat) {
   grid.appendChild(dayCard);
 }
 
-// ── SALES GUIDE ACCORDION ─────────────────────────────────────
-function toggleSg(id) {
-  const body = document.getElementById(id + '-body');
-  const arr  = document.getElementById(id + '-arr');
-  body.classList.toggle('open');
-  arr.classList.toggle('open');
+
+
+// ══════════════════════════════════════════════════
+// ③ 지금 놓치는 고객
+// ══════════════════════════════════════════════════
+function renderMissedCustomers(r1, r2, cat) {
+  const seed = (r1.length * 5 + r2.length * 9 + cat.length * 7) % 8;
+  const M = [0.75,0.9,1.0,1.15,1.3,1.45,1.65,1.9][seed];
+  const radiusMulti = _mapRadius <= 300 ? 0.35 : _mapRadius <= 500 ? 0.6 : 1.0;
+
+  const monthlyOrders = Math.round(4200 * M * radiusMulti);
+  const missedOrders  = Math.round(monthlyOrders * 0.38);
+  const missedRevM    = Math.round(missedOrders * 28000 / 10000);
+  const potentialCust = Math.round(missedOrders * 1.4);
+  const competeStores = Math.round(88 * M);
+  const notJoined     = Math.round(248 * M * (1 - 0.32));
+
+  const radiusLabel = _mapRadius >= 1000 ? '1km' : _mapRadius + 'm';
+
+  document.getElementById('missContent').innerHTML = `
+    <div class="miss-hero">
+      <div class="miss-hero-num">${missedRevM.toLocaleString()}<span class="miss-hero-unit">만원</span></div>
+      <div class="miss-hero-label">이 달 배민 미입점으로 놓치는 추정 매출</div>
+      <div class="miss-hero-sub">${r2} ${cat} 상권 · 반경 ${radiusLabel} 기준 추정치</div>
+    </div>
+    <div class="miss-grid">
+      <div class="miss-card">
+        <div class="miss-card-val">${monthlyOrders.toLocaleString()}<span>건</span></div>
+        <div class="miss-card-lbl">반경 ${radiusLabel} 내<br>${cat} 배달 월 주문 수요</div>
+      </div>
+      <div class="miss-card">
+        <div class="miss-card-val">${missedOrders.toLocaleString()}<span>건</span></div>
+        <div class="miss-card-lbl">파트너님이<br>놓치고 있는 주문</div>
+      </div>
+      <div class="miss-card">
+        <div class="miss-card-val">${potentialCust.toLocaleString()}<span>명</span></div>
+        <div class="miss-card-lbl">매장에서 절대<br>만날 수 없는 잠재 고객</div>
+      </div>
+      <div class="miss-card">
+        <div class="miss-card-val">${notJoined.toLocaleString()}<span>개</span></div>
+        <div class="miss-card-lbl">배달 미이용<br>잠재 경쟁 가게 수</div>
+      </div>
+    </div>
+    <div class="miss-bar">
+      <div class="miss-bar-title">🔴 지금 vs 배민 입점 후 비교</div>
+      <div class="miss-compare">
+        <div class="miss-col before">
+          <div class="miss-col-ttl">현재 (미입점)</div>
+          <div class="miss-col-val">오프라인</div>
+          <div class="miss-col-sub">매장 방문 고객만</div>
+        </div>
+        <div class="miss-arrow">→</div>
+        <div class="miss-col after">
+          <div class="miss-col-ttl">배민 입점 후</div>
+          <div class="miss-col-val">+배달 고객</div>
+          <div class="miss-col-sub">반경 ${radiusLabel} 잠재 고객 ${potentialCust.toLocaleString()}명 추가</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-card" style="margin-top:12px;">
+      <div class="insight-inner">
+        <div class="insight-item">
+          <div class="ii-label">놓치는 추정 일 매출</div>
+          <div class="ii-value">${Math.round(missedRevM/30).toLocaleString()}<span>만원</span></div>
+          <div class="ii-sub">매일 발생하는 기회손실</div>
+        </div>
+        <div class="insight-item">
+          <div class="ii-label">배민 미입점 경쟁 가게</div>
+          <div class="ii-value">${notJoined.toLocaleString()}<span>개</span></div>
+          <div class="ii-sub">먼저 입점하면 선점 가능</div>
+        </div>
+        <div class="insight-item">
+          <div class="ii-label">배민 입점 후 고객 접점</div>
+          <div class="ii-value">+${potentialCust.toLocaleString()}<span>명</span></div>
+          <div class="ii-sub">매장에선 불가능한 신규고객</div>
+        </div>
+      </div>
+      <div class="insight-tip" style="margin-top:12px;">
+        <div class="tip-ttl">💡 영업 포인트</div>
+        <div class="tip-body">
+          ${r2} <strong>${cat}</strong> 상권에서 이번 달만 배달 주문이 약 <strong>${monthlyOrders.toLocaleString()}건</strong> 발생하고 있습니다.
+          파트너님 가게가 배민에 없는 지금 이 순간에도 그 주문들은 인근 경쟁 가게로 가고 있어요.
+          매달 <strong>${missedRevM.toLocaleString()}만원</strong>의 추가 매출 기회를 놓치고 계신 겁니다.
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-function openSg(id) {
-  const body = document.getElementById(id + '-body');
-  const arr  = document.getElementById(id + '-arr');
-  if (!body.classList.contains('open')) {
-    body.classList.add('open');
-    arr.classList.add('open');
-  }
-  setTimeout(() => body.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
-}
-
-// ── RENDER: 성장 사례 ─────────────────────────────────────────
-function renderCases(cat) {
-  const emojiMap = {
-    '치킨':'🍗','중식':'🍜','피자':'🍕','한식':'🍱','고기':'🥩',
-    '패스트푸드':'🍔','족발/보쌈':'🐷','분식':'🍢','카페/디저트':'☕',
-    '돈까스/회':'🍣','찜/탕':'🍲','도시락':'🥡','아시안':'🍛','양식':'🍝','야식':'🌙'
-  };
-  const icon = emojiMap[cat] || '🏪';
-
-  const cases = [
-    {
-      storeName: `○○ ${cat}`, icon,
-      region: '서울 송파구', period: '입점 후 3개월',
-      bRev: '2,100만원', aRev: '4,800만원', rGrow: '+129%',
-      bOrd: '820건', aOrd: '1,940건', oGrow: '+137%',
-      chips: [
-        { l:'리뷰 수', v:'234개' }, { l:'노출 증가', v:'+320%' },
-        { l:'재주문율', v:'42%' },  { l:'입점 채널', v:'배민배달' }
-      ]
-    },
-    {
-      storeName: `△△ ${cat}집`, icon,
-      region: '경기 수원시', period: '입점 후 6개월',
-      bRev: '3,200만원', aRev: '8,100만원', rGrow: '+153%',
-      bOrd: '1,240건', aOrd: '3,150건', oGrow: '+154%',
-      chips: [
-        { l:'리뷰 수', v:'412개' }, { l:'노출 증가', v:'+480%' },
-        { l:'재주문율', v:'51%' },  { l:'입점 채널', v:'가게배달+배민배달' }
-      ]
-    }
-  ];
-
-  const c = document.getElementById('caseContainer');
-  c.innerHTML = '';
-  cases.forEach(cs => {
+// ══════════════════════════════════════════════════
+// ④ 성장 사례
+// ══════════════════════════════════════════════════
+function renderCaseCards(cat) {
+  const cases = CASE_DATA[cat] || CASE_DATA['치킨'];
+  const container = document.getElementById('caseContainer');
+  container.innerHTML = '';
+  cases.forEach(function(cs) {
     const d = document.createElement('div');
     d.className = 'case-card';
     d.innerHTML = `
-      <div class="case-head">
-        <div class="store-icon">${cs.icon}</div>
-        <div>
-          <div class="s-name">${cs.storeName}</div>
-          <div class="s-meta">📍 ${cs.region} &nbsp;·&nbsp; ${cs.period}</div>
-        </div>
-      </div>
-      <div class="ba-container">
-        <div class="ba-col">
-          <div class="ba-period">입점 전</div>
-          <div class="ba-metric">
-            <div class="ba-num">${cs.bRev}</div>
-            <div class="ba-numlbl">월 매출</div>
-          </div>
-          <div class="ba-metric">
-            <div class="ba-num" style="font-size:17px">${cs.bOrd}</div>
-            <div class="ba-numlbl">월 주문수</div>
-          </div>
-        </div>
-        <div class="arrows-col">
-          <div class="arr">→</div>
-          <div class="grow-pill">매출 ${cs.rGrow}</div>
-          <div style="height:6px"></div>
-          <div class="grow-pill orange">주문 ${cs.oGrow}</div>
-        </div>
-        <div class="ba-col">
-          <div class="ba-period after">입점 후</div>
-          <div class="ba-metric">
-            <div class="ba-num after">${cs.aRev}</div>
-            <div class="ba-numlbl">월 매출</div>
-          </div>
-          <div class="ba-metric">
-            <div class="ba-num after" style="font-size:17px">${cs.aOrd}</div>
-            <div class="ba-numlbl">월 주문수</div>
-          </div>
-        </div>
+      <div class="case-header">
+        <div class="case-icon">${cs.icon}</div>
+        <div><div class="case-name">${cs.name}</div><div class="case-meta">${cs.meta}</div></div>
       </div>
       <div class="metrics-row">
         ${cs.chips.map(m=>`<div class="m-chip"><div class="m-lbl">${m.l}</div><div class="m-val">${m.v}</div></div>`).join('')}
-      </div>
-    `;
-    c.appendChild(d);
+      </div>`;
+    container.appendChild(d);
   });
 }
-</script>
-</body>
-</html>
-      <div class="metrics-row">
-        ${cs.chips.map(m=>`<div class="m-chip"><div class="m-lbl">${m.l}</div><div class="m-val">${m.v}</div></div>`).join('')}
+
+// ══════════════════════════════════════════════════
+// ⑤ 예상 성과
+// ══════════════════════════════════════════════════
+function renderExpectedResults(r1, r2, cat) {
+  const seed = (r1.length * 3 + r2.length * 7 + cat.length * 11) % 8;
+  const M = [0.7,0.85,1.0,1.1,1.25,1.4,1.6,1.8][seed];
+  const radiusMulti = _mapRadius <= 300 ? 0.35 : _mapRadius <= 500 ? 0.6 : 1.0;
+
+  const avgRev   = Math.round(3600 * M).toLocaleString();
+  const topRev   = Math.round(8200 * M).toLocaleString();
+  const avgOrd   = Math.round(1520 * M).toLocaleString();
+  const topOrd   = Math.round(3500 * M).toLocaleString();
+  const newCust  = Math.round(4200 * M * radiusMulti * 0.38 * 1.4);
+  const addRevM  = Math.round(3600 * M);
+
+  document.getElementById('expectContent').innerHTML = `
+    <div class="expect-hero">
+      <div class="expect-hero-label">배민 입점 시 예상 월 추가 매출 (전체 평균)</div>
+      <div class="expect-hero-num">${addRevM.toLocaleString()}<span class="expect-hero-unit">만원</span></div>
+      <div class="expect-hero-sub">${r2} ${cat} 상권 기준 · 입점 3개월차 평균</div>
+      <a class="calc-link-btn" href="https://woowahan.lightning.force.com/lightning/popout/utility?0.windowed=true" target="_blank" rel="noopener">
+        🔗 수익계산기로 직접 계산해보기
+      </a>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card accent">
+        <div class="stat-lbl">예상 월 추가 매출<br>(상위 20% 평균)</div>
+        <div class="stat-val">${topRev}<span>만원</span></div>
+        <div class="stat-hint">입점 3개월차 기준</div>
       </div>
-    `;
-    c.appendChild(d);
-  });
+      <div class="stat-card accent">
+        <div class="stat-lbl">예상 월 추가 주문<br>(상위 20% 평균)</div>
+        <div class="stat-val">${topOrd}<span>건</span></div>
+        <div class="stat-hint">입점 3개월차 기준</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">예상 월 추가 매출<br>(전체 평균)</div>
+        <div class="stat-val">${avgRev}<span>만원</span></div>
+        <div class="stat-hint">전체 가게 평균</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">예상 월 추가 주문<br>(전체 평균)</div>
+        <div class="stat-val">${avgOrd}<span>건</span></div>
+        <div class="stat-hint">전체 가게 평균</div>
+      </div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-inner">
+        <div class="insight-item">
+          <div class="ii-label">매장에서 만날 수 없는<br>신규 고객 (월 예상)</div>
+          <div class="ii-value">${newCust.toLocaleString()}<span>명</span></div>
+          <div class="ii-sub">배민 입점 시 추가 접점</div>
+        </div>
+        <div class="insight-item">
+          <div class="ii-label">배달 고객의 재주문율</div>
+          <div class="ii-value">67<span>%</span></div>
+          <div class="ii-sub">충성 고객 전환 가능성</div>
+        </div>
+        <div class="insight-item">
+          <div class="ii-label">매출 성장 기대치</div>
+          <div class="ii-value">+137<span>%</span></div>
+          <div class="ii-sub">배민배달 입점 후 평균</div>
+        </div>
+      </div>
+      <div class="insight-tip">
+        <div class="tip-ttl">💡 최종 영업 포인트</div>
+        <div class="tip-body">
+          지금 매장에서 열심히 일하셔도 만날 수 없는 고객이 매달 <strong>${newCust.toLocaleString()}명</strong>이나 있습니다.
+          배민 입점은 새로운 채널을 여는 것이기 때문에 기존 오프라인 매출을 건드리지 않고
+          <strong>순수하게 추가 매출</strong>이 생깁니다. 상위 20% 파트너는 월 <strong>${topRev}만원</strong>의 배달 매출을 기록합니다.
+        </div>
+      </div>
+    </div>
+  `;
 }
+
 </script>
 </body>
 </html>
