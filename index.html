@@ -344,6 +344,41 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
   .miss-arrow { transform:rotate(90deg); }
   .tab-btn { font-size:11px; padding:8px 4px; min-width:60px; }
 }
+
+/* ── RANK ITEMS (renderRankCards 생성) ── */
+.rank-item { display:flex; align-items:center; gap:8px; padding:6px 0;
+  border-bottom:1px solid var(--gray-100); }
+.rank-item:last-child { border-bottom:none; }
+.rank-info { flex:1; min-width:0; }
+.rank-name { font-size:12px; font-weight:600; color:var(--gray-700);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:3px; }
+.rank-bar-track { background:var(--gray-200); border-radius:4px; height:5px; overflow:hidden; }
+.r1 { color:#F6C90E; }
+.r2 { color:#B0B0B0; }
+.r3 { color:#CD7F32; }
+.r4 { color:var(--gray-400); }
+.r5 { color:var(--gray-300); }
+
+/* ── DAY ITEMS (요일 랭킹) ── */
+.day-item { display:flex; align-items:center; gap:8px; padding:7px 0;
+  border-bottom:1px solid var(--gray-100); }
+.day-item:last-child { border-bottom:none; }
+.day-medal { font-size:16px; width:22px; text-align:center; flex-shrink:0; }
+.day-name { font-size:13px; font-weight:700; color:var(--gray-700); width:28px; flex-shrink:0; }
+.day-bar-wrap { flex:1; }
+.day-bar-track { background:var(--gray-200); border-radius:4px; height:8px; overflow:hidden; }
+.day-bar-fill { background:var(--teal); height:100%; border-radius:4px; transition:width 0.6s ease; }
+.day-pct { font-size:12px; color:var(--gray-500); width:36px; text-align:right; font-weight:600; flex-shrink:0; }
+
+/* ── METRIC CHIPS (renderCaseCards 생성) ── */
+.metric-chip { background:var(--gray-50); border:1px solid var(--gray-200);
+  border-radius:8px; padding:8px 12px; flex:1; min-width:120px; }
+.metric-chip-lbl { font-size:11px; color:var(--gray-600); font-weight:600; margin-bottom:3px; }
+.metric-chip-val { font-size:15px; font-weight:800; color:var(--teal-dark); }
+
+/* ── LOGO AREA ── */
+.logo-area { display:flex; flex-direction:column; }
+
 </style>
 </head>
 <body>
