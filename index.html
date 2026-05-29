@@ -185,6 +185,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
 .notice { background:var(--yellow-bg); border-radius:var(--radius-sm); padding:12px 16px;
   font-size:13px; color:var(--yellow-text); display:flex; align-items:flex-start;
   gap:8px; margin-bottom:16px; line-height:1.6; }
+.area-note { font-size:12px; color:var(--gray-500); margin-bottom:14px; padding:0 2px; }
 
 /* ── STAT CARDS ── */
 .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:16px; }
@@ -499,26 +500,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
   <!-- 탭 바 -->
   <div class="tab-bar">
     <button class="tab-btn active" id="tbtn-market" onclick="switchTab('market')">
-      <span class="tab-num">①</span>상권 진단
-    </button>
-    <button class="tab-btn" id="tbtn-compete" onclick="switchTab('compete')">
-      <span class="tab-num">②</span>경쟁 현황
+      <span class="tab-num">❶</span>상권 진단
     </button>
     <button class="tab-btn" id="tbtn-miss" onclick="switchTab('miss')">
-      <span class="tab-num">③</span>놓치는 고객
+      <span class="tab-num">❷</span>놓치고 있는 시장
     </button>
     <button class="tab-btn" id="tbtn-cases" onclick="switchTab('cases')">
-      <span class="tab-num">④</span>성장 사례
+      <span class="tab-num">❸</span>실제 입점 사례
     </button>
     <button class="tab-btn" id="tbtn-expect" onclick="switchTab('expect')">
-      <span class="tab-num">⑤</span>예상 성과
+      <span class="tab-num">❹</span>입점 기대 효과
     </button>
     <button class="tab-btn" id="tbtn-calc" onclick="switchTab('calc')">
-      <span class="tab-num">⑥</span>수익 계산기
+      <span class="tab-num">❺</span>수익 계산기
     </button>
   </div>
 
-  <!-- ① 상권 진단 -->
+  <!-- ❶ 상권 진단 -->
   <div class="tab-panel active" id="tab-market">
     <div class="section-block">
       <div class="section-head">
@@ -529,43 +527,29 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
         <span>⚠️</span>
         <span>실제 데이터 연동 전 구조 확인용 샘플입니다. 배달 매출 제외 동종 카테고리 외식업 전체 기준입니다.</span>
       </div>
+      <div class="area-note">※ 상권 정보는 시·군·구 단위입니다.</div>
       <div class="stats-grid" id="areaStatsGrid"></div>
       <div class="insight-card" id="areaInsightCard"></div>
-    </div>
-  </div>
-
-  <!-- ② 경쟁 현황 -->
-  <div class="tab-panel" id="tab-compete">
-    <div class="section-block">
-      <div class="section-head">
-        <div class="section-ttl">📊 배민 상권 데이터</div>
-        <span class="badge-sample">샘플 데이터</span>
-      </div>
-      <div class="notice">
-        <span>⚠️</span>
-        <span>실제 데이터 연동 전 샘플입니다. 배달의민족 플랫폼 기준 입점 현황 및 주문 데이터입니다.</span>
-      </div>
-      <div class="stats-grid" id="statsGrid"></div>
-      <div class="insight-card" id="insightCard"></div>
       <div class="rank-grid" id="rankGrid"></div>
     </div>
   </div>
 
-  <!-- ③ 지금 놓치는 고객 -->
+
+  <!-- ❷ 놓치고 있는 시장 -->
   <div class="tab-panel" id="tab-miss">
     <div class="section-block">
       <div class="section-head">
-        <div class="section-ttl">🚨 지금 이 순간 놓치는 고객</div>
+        <div class="section-ttl">🚨 지금 놓치고 있는 시장</div>
       </div>
       <div id="missContent"></div>
     </div>
   </div>
 
-  <!-- ④ 성장 사례 -->
+  <!-- ❸ 실제 입점 사례 -->
   <div class="tab-panel" id="tab-cases">
     <div class="section-block">
       <div class="section-head">
-        <div class="section-ttl">🏆 같은 카테고리 실제 성장 사례</div>
+        <div class="section-ttl">🏆 같은 카테고리 실제 입점 사례</div>
         <span class="badge-sample">샘플 데이터</span>
       </div>
       <div class="notice">
@@ -576,17 +560,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Got
     </div>
   </div>
 
-  <!-- ⑤ 예상 성과 -->
+  <!-- ❹ 입점 기대 효과 -->
   <div class="tab-panel" id="tab-expect">
     <div class="section-block">
       <div class="section-head">
-        <div class="section-ttl">✨ 배민 입점 시 예상 성과</div>
+        <div class="section-ttl">✨ 배민 입점 기대 효과</div>
       </div>
       <div id="expectContent"></div>
     </div>
   </div>
 
-  <!-- ⑥ 수익 계산기 -->
+  <!-- ❺ 수익 계산기 -->
   <div class="tab-panel" id="tab-calc">
     <div class="section-block">
       <div class="section-head">
@@ -763,20 +747,20 @@ const CATEGORIES = [
 
 const CASE_DATA = {
   '치킨': [
-    {icon:'🍗', name:'노원 바삭통닭', meta:'서울 노원구 · 치킨', chips:[
+    {icon:'🍗', name:'노원 바삭통닭', meta:'서울 노원구 · 치킨', lat:37.6542, lng:127.0568, chips:[
       {l:'입점 전 월매출',v:'580만원'},{l:'3개월차 총매출',v:'1,240만원'},
       {l:'배달 신규고객',v:'월 +312명'},{l:'주문 성장률',v:'+114%'}]},
-    {icon:'🍗', name:'수원 황금치킨', meta:'경기 수원시 · 치킨', chips:[
+    {icon:'🍗', name:'수원 황금치킨', meta:'경기 수원시 · 치킨', lat:37.2636, lng:127.0286, chips:[
       {l:'입점 전 월매출',v:'720만원'},{l:'3개월차 총매출',v:'1,580만원'},
       {l:'배달 신규고객',v:'월 +425명'},{l:'주문 성장률',v:'+119%'}]},
   ],
   '한식': [
-    {icon:'🍚', name:'마포 집밥한상', meta:'서울 마포구 · 한식', chips:[
+    {icon:'🍚', name:'마포 집밥한상', meta:'서울 마포구 · 한식', lat:37.5638, lng:126.9084, chips:[
       {l:'입점 전 월매출',v:'890만원'},{l:'3개월차 총매출',v:'1,920만원'},
       {l:'배달 신규고객',v:'월 +518명'},{l:'주문 성장률',v:'+116%'}]},
   ],
   '피자': [
-    {icon:'🍕', name:'분당 화덕피자', meta:'경기 성남시 · 피자', chips:[
+    {icon:'🍕', name:'분당 화덕피자', meta:'경기 성남시 · 피자', lat:37.3825, lng:127.1230, chips:[
       {l:'입점 전 월매출',v:'1,100만원'},{l:'3개월차 총매출',v:'2,350만원'},
       {l:'배달 신규고객',v:'월 +620명'},{l:'주문 성장률',v:'+114%'}]},
   ],
@@ -1027,7 +1011,7 @@ function setResultRadius(r) {
 // ══════════════════════════════════════════════════
 // TAB SWITCHER
 // ══════════════════════════════════════════════════
-const TAB_IDS = ['market','compete','miss','cases','expect','calc'];
+const TAB_IDS = ['market','miss','cases','expect','calc'];
 
 // 지역별 배달비 기본값 (배민배달 기준)
 const DELIVERY_FEE_BY_REGION = {
@@ -1059,12 +1043,11 @@ function renderAllResults(r1, r2, cat) {
   document.getElementById('resultCatTag').textContent = cat;
   document.getElementById('resultRadiusTag').textContent = _mapRadius >= 1000 ? '1km 반경' : _mapRadius + 'm 반경';
   document.getElementById('resultAddr').textContent = _partnerAddr;
-  renderAreaData(r1, r2, cat);           // ① 외부 데이터 → rgn2 유지
-  renderBaeminStats(r1, r2, dong, cat);  // ② 배민 내부 → dong 단위
-  renderMissedCustomers(r1, r2, dong, cat); // ③ 배민 내부 → dong 단위
-  renderCaseCards(cat);
-  renderExpectedResults(r1, r2, dong, cat); // ⑤ 배민 내부 → dong 단위
-  renderCalcTab(r1, r2, dong);           // ⑥ 계산기 초기화
+  renderAreaData(r1, r2, cat);              // ❶ 상권 진단
+  renderMissedCustomers(r1, r2, dong, cat); // ❷ 놓치고 있는 시장
+  renderCaseCards(cat);                     // ❸ 실제 입점 사례
+  renderExpectedResults(r1, r2, dong, cat); // ❹ 입점 기대 효과
+  renderCalcTab(r1, r2, dong);              // ❺ 수익 계산기
   switchTab('market');
 }
 
@@ -1127,75 +1110,13 @@ function renderAreaData(r1, r2, cat) {
       </div>
     </div>
   `;
-}
-
-
-
-// ══════════════════════════════════════════════════
-// ② 경쟁 현황
-// ══════════════════════════════════════════════════
-function renderBaeminStats(r1, r2, dong, cat) {
-  const areaLabel = dong ? `<span class="dong-badge">동 단위</span>` : '';
-  const areaName = dong ? dong : r2;
-  const seed = (r1.length * 3 + r2.length * 7 + cat.length * 11) % 8;
-  const M = [0.7, 0.85, 1.0, 1.1, 1.25, 1.4, 1.6, 1.8][seed];
-
-  const avgRev  = Math.round(3600 * M).toLocaleString();
-  const topRev  = Math.round(8200 * M).toLocaleString();
-  const avgOrd  = Math.round(1520 * M).toLocaleString();
-  const topOrd  = Math.round(3500 * M).toLocaleString();
-  const mktSize = Math.round(16 * M * 10) / 10;
-  const stores  = Math.round(88 * M);
-
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card accent">
-      <div class="stat-lbl">예상 추가매출<br>(상위 20% 평균)</div>
-      <div class="stat-val">${topRev}<span>만원</span></div>
-      <div class="stat-hint">월 기준 · 입점 후 3개월차</div>
-    </div>
-    <div class="stat-card accent">
-      <div class="stat-lbl">예상 추가주문수<br>(상위 20% 평균)</div>
-      <div class="stat-val">${topOrd}<span>건</span></div>
-      <div class="stat-hint">월 기준 · 입점 후 3개월차</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-lbl">${areaName} ${cat}${areaLabel}<br>배민 활성 가게 수</div>
-      <div class="stat-val">${stores}<span>개</span></div>
-      <div class="stat-hint">배민 기준</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-lbl">${areaName} 배민 배달${areaLabel}<br>시장 규모 (월)</div>
-      <div class="stat-val">${mktSize}<span>억원</span></div>
-      <div class="stat-hint">배민 기준 추정</div>
-    </div>
-  `;
-
-  document.getElementById('insightCard').innerHTML = `
-    <div class="insight-inner">
-      <div class="insight-item">
-        <div class="ii-label">배민 입점 시 예상 평균 매출</div>
-        <div class="ii-value">${avgRev}<span>만원/월</span></div>
-        <div class="ii-sub">전체 가게 평균 기준</div>
-      </div>
-      <div class="insight-item">
-        <div class="ii-label">배민 입점 시 예상 평균 주문수</div>
-        <div class="ii-value">${avgOrd}<span>건/월</span></div>
-        <div class="ii-sub">전체 가게 평균 기준</div>
-      </div>
-      <div class="insight-tip">
-        <div class="tip-ttl">💡 세일즈 포인트</div>
-        <div class="tip-body">
-          ${areaName} <strong>${cat}</strong> 상권${areaLabel} 배민 배달 시장은 월 <strong>${mktSize}억원</strong> 규모입니다.
-          배민배달 입점 시 커버리지 확대로 평균 <strong>+137% 주문 성장</strong>을 기대할 수 있으며,
-          상위 20% 파트너는 월 <strong>${topRev}만원</strong>의 배달 매출을 기록합니다.
-        </div>
-      </div>
-    </div>
-  `;
-
-  // 인기 메뉴, 주문 시간대, 요일 rank cards
+  // 인기메뉴·시간대·요일 랭크 카드 → ❶ 상권 진단에 표시
   renderRankCards(cat);
 }
+
+
+
+// ══════════════════════════════════════════════════
 
 
 function renderRankCards(cat) {
@@ -1282,8 +1203,6 @@ function renderMissedCustomers(r1, r2, dong, cat) {
   const missedOrders  = Math.round(monthlyOrders * 0.38);
   const missedRevM    = Math.round(missedOrders * 28000 / 10000);
   const potentialCust = Math.round(missedOrders * 1.4);
-  const competeStores = Math.round(88 * M);
-  const notJoined     = Math.round(248 * M * (1 - 0.32));
   const radiusLabel = _mapRadius >= 1000 ? '1km' : _mapRadius + 'm';
 
   document.getElementById('missContent').innerHTML = `
@@ -1305,10 +1224,7 @@ function renderMissedCustomers(r1, r2, dong, cat) {
         <div class="miss-card-val">${potentialCust.toLocaleString()}<span>명</span></div>
         <div class="miss-card-lbl">매장에서 절대<br>만날 수 없는 잠재 고객</div>
       </div>
-      <div class="miss-card">
-        <div class="miss-card-val">${notJoined.toLocaleString()}<span>개</span></div>
-        <div class="miss-card-lbl">배달 미이용<br>잠재 경쟁 가게 수</div>
-      </div>
+
     </div>
     <div class="miss-bar">
       <div class="miss-bar-title">🔴 지금 vs 배민 입점 후 비교</div>
@@ -1333,11 +1249,7 @@ function renderMissedCustomers(r1, r2, dong, cat) {
           <div class="ii-value">${Math.round(missedRevM/30).toLocaleString()}<span>만원</span></div>
           <div class="ii-sub">매일 발생하는 기회손실</div>
         </div>
-        <div class="insight-item">
-          <div class="ii-label">배민 미입점 경쟁 가게</div>
-          <div class="ii-value">${notJoined.toLocaleString()}<span>개</span></div>
-          <div class="ii-sub">먼저 입점하면 선점 가능</div>
-        </div>
+
         <div class="insight-item">
           <div class="ii-label">배민 입점 후 고객 접점</div>
           <div class="ii-value">+${potentialCust.toLocaleString()}<span>명</span></div>
@@ -1359,8 +1271,27 @@ function renderMissedCustomers(r1, r2, dong, cat) {
 // ══════════════════════════════════════════════════
 // ④ 성장 사례
 // ══════════════════════════════════════════════════
+function _haversineDist(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+            Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+            Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
 function renderCaseCards(cat) {
-  const cases = CASE_DATA[cat] || CASE_DATA['치킨'];
+  let cases = (CASE_DATA[cat] || CASE_DATA['치킨']).slice();
+  // 검색한 주소 기준 가까운 순 정렬
+  if (_mapPos && cases.length > 1) {
+    const uLat = _mapPos.getLat(), uLng = _mapPos.getLng();
+    cases.sort(function(a, b) {
+      const dA = (a.lat && a.lng) ? _haversineDist(uLat, uLng, a.lat, a.lng) : 99999;
+      const dB = (b.lat && b.lng) ? _haversineDist(uLat, uLng, b.lat, b.lng) : 99999;
+      return dA - dB;
+    });
+  }
   const container = document.getElementById('caseContainer');
   container.innerHTML = '';
   cases.forEach(function(cs) {
@@ -1398,6 +1329,8 @@ function renderExpectedResults(r1, r2, dong, cat) {
   const topOrd   = Math.round(3500 * M).toLocaleString();
   const newCust  = Math.round(4200 * M * radiusMulti * 0.38 * 1.4);
   const addRevM  = Math.round(3600 * M);
+  const stores   = Math.round(88 * M);
+  const mktSize  = Math.round(16 * M * 10) / 10;
 
   document.getElementById('expectContent').innerHTML = `
     <div class="expect-hero">
@@ -1425,6 +1358,16 @@ function renderExpectedResults(r1, r2, dong, cat) {
         <div class="stat-lbl">예상 월 추가 주문<br>(전체 평균)</div>
         <div class="stat-val">${avgOrd}<span>건</span></div>
         <div class="stat-hint">전체 가게 평균</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">${areaName} ${cat}${areaLabel}<br>배민 활성 가게 수</div>
+        <div class="stat-val">${stores}<span>개</span></div>
+        <div class="stat-hint">배민 기준</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">${areaName} 배민 배달${areaLabel}<br>시장 규모 (월)</div>
+        <div class="stat-val">${mktSize}<span>억원</span></div>
+        <div class="stat-hint">배민 기준 추정</div>
       </div>
     </div>
     <div class="insight-card">
@@ -1533,14 +1476,4 @@ function runCalc() {
 }
 
 // ══════════════════════════════════════════════════
-// PASSWORD CHECK (DOMContentLoaded)
-// ══════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function() {
-  const stored = sessionStorage.getItem('hvc_auth');
-  if (stored === getTodayPw()) {
-    document.getElementById('pw-screen').style.display = 'none';
-  }
-});
-</script>
-</body>
-</html>
+// PASSWO
